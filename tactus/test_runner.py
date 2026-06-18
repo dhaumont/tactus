@@ -11,6 +11,7 @@ import shutil
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from unittest import case
 
 import tomli
 
@@ -54,9 +55,6 @@ class TestCases:
 
         self.verbose = args.verbose
         self.cases = definitions.get("cases", {})
-        self.reference_date = evaluate_date(
-            f"{definitions['general'].get('reference_date', '-P1D')}"
-        )
         self.max_workers = definitions["general"].get("max_workers", None)
         self.cmds = {}
         self.mode = definitions["general"].get("mode", "suite")
@@ -176,15 +174,7 @@ class TestCases:
         logger.info("Create config files in {}", self.test_dir)
 
         for case, item in self.cases.items():
-            if case not in self.assigned:
-                self.assigned[case] = self.reference_date
-
-            if case not in cases:  # or "config_name" in self.cases[case]:
-                continue
-
-            if "host" in item:
-                self.assigned[case] = self.assigned[item["host"]]
-
+            
             subtag = item.get("subtag", "")
             extra = list(self.extra) + list(item.get("extra", []))
 
@@ -193,6 +183,23 @@ class TestCases:
             if self.generate_refs:
                 modifs = merge_dicts(modifs, self.genchecks, True)
             modifs = merge_dicts(modifs, self.cases[case].get("modifs", {}), True)
+            
+            if 'reference_date' in modifs['general']:
+                logger.error("Evaluate reference_date for {}: {}", case, modifs['general']['reference_date'])
+                reference_date = evaluate_date(
+                f"{modifs['general'].get('reference_date')}"
+                )
+                logger.error("Evaluated reference_date for {}: {}", case, reference_date)
+            else:
+                reference_date = self.config["general"].get("reference_date", "-P1D")
+            
+            if case not in self.assigned:
+                self.assigned[case] = reference_date
+
+            if "host" in item:
+                logger.error("Assign reference_date for {} from host {}: {}", case, item["host"], self.assigned[item["host"]])
+                self.assigned[case] = self.assigned[item["host"]]
+
             config = self.config.copy(
                 update={
                     "modifs": modifs,
