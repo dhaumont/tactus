@@ -83,6 +83,9 @@
 [cases.cy50t2_alaro_eps.modifs.eps.general]
   members = "0:3"
 
+[cases.cy50t2_alaro_eps.modifs.general]
+  reference_date = "-P1D"
+
 [cases.cy50t2_alaro_eps.modifs.suite_control]
   create_static_data = false
   mirror_suite = true
@@ -178,6 +181,9 @@
 
 [cases.cy50t2_arome_eps.modifs.eps.general]
   members = "0:3"
+
+[cases.cy50t2_arome_eps.modifs.general]
+  reference_date = "-P1D"
 
 [cases.cy50t2_arome_eps.modifs.system]
   case_suffix = "_eps"
@@ -309,6 +315,9 @@
 [cases.cy50t2_harmonie_arome_eps.modifs.system]
   case_suffix = "_eps"
   climdir = "@REFERENCE_DATA@/@CASE_PREFIX@/cy50t2_harmonie_arome/climate/@DOMAIN@"
+
+[cases.cy50t2_harmonie_arome_eps.modifs.general]
+  reference_date = "-P1D"
 
 [cases.cy50t2_harmonie_arome_eps.modifs.suite_control]
   create_static_data = false

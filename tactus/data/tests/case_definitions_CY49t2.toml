@@ -67,6 +67,9 @@
 [cases.cy49t2_alaro_eps.modifs.eps.general]
   members = "0:3"
 
+[cases.cy49t2_alaro_eps.modifs.general]
+  reference_date = "-P1D"
+
 [cases.cy49t2_alaro_eps.modifs.suite_control]
   create_static_data = false
   mirror_suite = true
@@ -149,6 +152,9 @@
 
 [cases.cy49t2_arome_eps.modifs.eps.general]
   members = "0:3"
+
+[cases.cy49t2_arome_eps.modifs.general]
+  reference_date = "-P1D"
 
 [cases.cy49t2_arome_eps.modifs.system]
   case_suffix = "_eps"
@@ -272,6 +278,9 @@
 
 [cases.cy49t2_harmonie_arome_eps.modifs.eps.general]
   members = "0:3"
+
+[cases.cy49t2_harmonie_arome_eps.modifs.general]
+  reference_date = "-P1D"
 
 [cases.cy49t2_harmonie_arome_eps.modifs.system]
   case_suffix = "_eps"
