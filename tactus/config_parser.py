@@ -4,6 +4,7 @@
 import contextlib
 import copy
 import glob
+import hashlib
 import json
 import os
 import tempfile
@@ -226,7 +227,15 @@ class BasicConfig(BaseMapping):
         Raises:
             TypeError: when unknown filetype as config_file is given.
         """
-        BasicConfig.save_dictionary_as(self.dict(), config_file)
+        dict_to_save = self.dict()
+        etime = dict_to_save["general"]["start_etime"]
+        dict_to_save["general"]["start_etime"] = 0
+        dict_to_save["genesis"]["checksum"] = 0
+        serialized = json.dumps(dict_to_save, sort_keys=True, ensure_ascii=True)
+        checksum = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+        dict_to_save["genesis"]["checksum"] = checksum
+        dict_to_save["general"]["start_etime"] = etime
+        BasicConfig.save_dictionary_as(dict_to_save, config_file)
 
     @staticmethod
     def save_dictionary_as(dictionary, config_file):
