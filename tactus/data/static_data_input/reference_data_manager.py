@@ -22,11 +22,11 @@ def get_files_from_list(input_file, root_folder, verbose):
                 print(f"{filename}, {file_size}")
         else:
             print(f"Warning: {filename} not found in {root_folder}")
-            
+
     return files
-    
+
 def generate_json(input_file, output_json, root_folder, verbose):
-   
+
     files = get_files_from_list(input_file, root_folder, verbose)
 
     data = {"folder": root_folder, "files": files}
@@ -84,7 +84,7 @@ def validate(json_file, folder_path, ignore_list = None, verbose = False):
             relative_path = os.path.relpath(os.path.join(root, filename), folder_path)
             if ignore_list and ignore_list.match_file(relative_path):
                 continue
-    
+
             if relative_path not in expected_files:
                 unknown_files.append(relative_path)
     return reference_folder, target_folder,missing_files, unknown_files, key_mismatch
@@ -94,7 +94,7 @@ def report(missing_files, unknown_files, key_mismatch):
 
     if missing_files:
         print(f"# Missing files ({len(missing_files)}):")
-        for file in missing_files:         
+        for file in missing_files:
                 print(f"D {file}")
 
     else:
@@ -109,7 +109,7 @@ def report(missing_files, unknown_files, key_mismatch):
 
     if key_mismatch:
         print(f"# Files with incorrect size ({len(key_mismatch)}):")
-        for file, actual_key, expected_key in key_mismatch:           
+        for file, actual_key, expected_key in key_mismatch:
             print(f"M {file} (expected: {expected_key}, found: {actual_key})")
 
     else:
@@ -120,7 +120,7 @@ def copy(missing_files, key_mismatch,from_folder, to_folder,force_update, scp_ho
 
     if missing_files:
         print(f"# Missing files ({len(missing_files)}):")
-        for file in missing_files:         
+        for file in missing_files:
                 dir_name = os.path.dirname(f"{to_folder}/{file}")
                 if scp_host:
                     print(
@@ -157,28 +157,29 @@ def copy(missing_files, key_mismatch,from_folder, to_folder,force_update, scp_ho
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
-    parser.add_argument("create", action="store_true", help="convert txt to json")    
-    parser.add_argument("status", action="store_true", help="check status")
-    parser.add_argument("copy", action="store_true", help="check status")
-    
+    parser.add_argument("--create", action="store_false", help="convert txt to json")
+    parser.add_argument("--status", action="store_false", help="check status")
+    parser.add_argument("--copy", action="store_false", help="check status")
+
     parser.add_argument("--folder", help="The folder to process.")
-    
+
     parser.add_argument(
         "--file_list", help="Path to required file of allowed files and folders.", default=None
     )
     parser.add_argument("--json", help="JSON file", default=None)
-    
+
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
     parser.add_argument(
         "--scp_host", help="Generate scp instructions if you provide an scp host with cmd"
     )
 
     args = parser.parse_args()
-    if not hasattr(args, "json"):
+    print(args)
+    if not args.json:
         print("Please provide a json file name")
         sys.exit(1)
 
-    if not hasattr(args, "folder"):
+    if not args.folder:
         print("Please provide a folder")
         sys.exit(1)
 
@@ -187,11 +188,15 @@ def main():
 
 
     if args.create:
-       generate_json(args.file_list, args.json, args.folder)
+       if not args.file_list:
+            print("Please provide a file containing file list")
+            sys.exit(1)
+
+       generate_json(args.file_list, args.json, args.folder,args.verbose)
     else:
         reference_folder, target_folder, missing_files, unknown_files, key_mismatch = validate(args.json, args.folder)
-        if args.check:
-            report(missing_files, unknown_files, key_mismatch)      
+        if args.status:
+            report(missing_files, unknown_files, key_mismatch)
         if args.copy:
             copy(missing_files,key_mismatch,reference_folder, target_folder,args.force_update, args.scp_host)
 
