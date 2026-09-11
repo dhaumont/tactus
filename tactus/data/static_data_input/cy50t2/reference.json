@@ -1,0 +1,945 @@
+{
+    "folder": "/hpcperm/snh02/DEODE",
+    "files": [
+        {
+            "filename": "RADSRTM",
+            "relative_path": "rrtm/CY46h1/RADSRTM",
+            "size": 1332584
+        },
+        {
+            "filename": "MCICA",
+            "relative_path": "rrtm/CY46h1/MCICA",
+            "size": 1120008
+        },
+        {
+            "filename": "RADRRTM",
+            "relative_path": "rrtm/CY48t3/RADRRTM",
+            "size": 1454208
+        },
+        {
+            "filename": "GOZOCLIM",
+            "relative_path": "rrtm/CY48t3/GOZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "OZOCLIM",
+            "relative_path": "rrtm/CY48t3/OZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C22CLIM",
+            "relative_path": "rrtm/CY48t3/C22CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1970",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1970",
+            "size": 672776
+        },
+        {
+            "filename": "NO2CLIM",
+            "relative_path": "rrtm/CY48t3/NO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2040",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2040",
+            "size": 672776
+        },
+        {
+            "filename": "GCO2CLIM",
+            "relative_path": "rrtm/CY48t3/GCO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "MOZOCLIM",
+            "relative_path": "rrtm/CY48t3/MOZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2050",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2050",
+            "size": 672776
+        },
+        {
+            "filename": "MCO2CLIM",
+            "relative_path": "rrtm/CY48t3/MCO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2100",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2100",
+            "size": 672776
+        },
+        {
+            "filename": "MCH4CLIM",
+            "relative_path": "rrtm/CY48t3/MCH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "RADSRTM",
+            "relative_path": "rrtm/CY48t3/RADSRTM",
+            "size": 1332584
+        },
+        {
+            "filename": "SO4_OBS1980",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1980",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2080",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2080",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2060",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2060",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2090",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2090",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2020",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2020",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2070",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2070",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1950",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1950",
+            "size": 672776
+        },
+        {
+            "filename": "GCH4CLIM",
+            "relative_path": "rrtm/CY48t3/GCH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2000",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2000",
+            "size": 672776
+        },
+        {
+            "filename": "RADAIOP",
+            "relative_path": "rrtm/CY48t3/RADAIOP",
+            "size": 179925
+        },
+        {
+            "filename": "CCL4CLIM",
+            "relative_path": "rrtm/CY48t3/CCL4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C11CLIM",
+            "relative_path": "rrtm/CY48t3/C11CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1940",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1940",
+            "size": 672776
+        },
+        {
+            "filename": "N2OCLIM",
+            "relative_path": "rrtm/CY48t3/N2OCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2010",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2010",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1960",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1960",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1930",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1930",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2030",
+            "relative_path": "rrtm/CY48t3/SO4_A1B2030",
+            "size": 672776
+        },
+        {
+            "filename": "ECOZC",
+            "relative_path": "rrtm/CY48t3/ECOZC",
+            "size": 62024
+        },
+        {
+            "filename": "CO2CLIM",
+            "relative_path": "rrtm/CY48t3/CO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "CH4CLIM",
+            "relative_path": "rrtm/CY48t3/CH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C12CLIM",
+            "relative_path": "rrtm/CY48t3/C12CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1990",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1990",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1920",
+            "relative_path": "rrtm/CY48t3/SO4_OBS1920",
+            "size": 672776
+        },
+        {
+            "filename": "MCICA",
+            "relative_path": "rrtm/CY48t3/MCICA",
+            "size": 1120008
+        },
+        {
+            "filename": "RADRRTM",
+            "relative_path": "rrtm/CY49t2/RADRRTM",
+            "size": 1454208
+        },
+        {
+            "filename": "GOZOCLIM",
+            "relative_path": "rrtm/CY49t2/GOZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "OZOCLIM",
+            "relative_path": "rrtm/CY49t2/OZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C22CLIM",
+            "relative_path": "rrtm/CY49t2/C22CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1970",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1970",
+            "size": 672776
+        },
+        {
+            "filename": "NO2CLIM",
+            "relative_path": "rrtm/CY49t2/NO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2040",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2040",
+            "size": 672776
+        },
+        {
+            "filename": "GCO2CLIM",
+            "relative_path": "rrtm/CY49t2/GCO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "MOZOCLIM",
+            "relative_path": "rrtm/CY49t2/MOZOCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2050",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2050",
+            "size": 672776
+        },
+        {
+            "filename": "MCO2CLIM",
+            "relative_path": "rrtm/CY49t2/MCO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2100",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2100",
+            "size": 672776
+        },
+        {
+            "filename": "MCH4CLIM",
+            "relative_path": "rrtm/CY49t2/MCH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "RADSRTM",
+            "relative_path": "rrtm/CY49t2/RADSRTM",
+            "size": 1332584
+        },
+        {
+            "filename": "SO4_OBS1980",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1980",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2080",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2080",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2060",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2060",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2090",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2090",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2020",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2020",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2070",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2070",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1950",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1950",
+            "size": 672776
+        },
+        {
+            "filename": "GCH4CLIM",
+            "relative_path": "rrtm/CY49t2/GCH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2000",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2000",
+            "size": 672776
+        },
+        {
+            "filename": "RADAIOP",
+            "relative_path": "rrtm/CY49t2/RADAIOP",
+            "size": 179925
+        },
+        {
+            "filename": "CCL4CLIM",
+            "relative_path": "rrtm/CY49t2/CCL4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C11CLIM",
+            "relative_path": "rrtm/CY49t2/C11CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1940",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1940",
+            "size": 672776
+        },
+        {
+            "filename": "N2OCLIM",
+            "relative_path": "rrtm/CY49t2/N2OCLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_A1B2010",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2010",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1960",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1960",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1930",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1930",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_A1B2030",
+            "relative_path": "rrtm/CY49t2/SO4_A1B2030",
+            "size": 672776
+        },
+        {
+            "filename": "ECOZC",
+            "relative_path": "rrtm/CY49t2/ECOZC",
+            "size": 62024
+        },
+        {
+            "filename": "CO2CLIM",
+            "relative_path": "rrtm/CY49t2/CO2CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "CH4CLIM",
+            "relative_path": "rrtm/CY49t2/CH4CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "C12CLIM",
+            "relative_path": "rrtm/CY49t2/C12CLIM",
+            "size": 559112
+        },
+        {
+            "filename": "SO4_OBS1990",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1990",
+            "size": 672776
+        },
+        {
+            "filename": "SO4_OBS1920",
+            "relative_path": "rrtm/CY49t2/SO4_OBS1920",
+            "size": 672776
+        },
+        {
+            "filename": "MCICA",
+            "relative_path": "rrtm/CY49t2/MCICA",
+            "size": 1120008
+        },
+        {
+            "filename": "rtcoef_meteosat_9_seviri.dat",
+            "relative_path": "satellite/rtcoef_rttov13/coef/rtcoef_meteosat_9_seviri.dat",
+            "size": 270618
+        },
+        {
+            "filename": "sccldcoef_meteosat_9_seviri.dat",
+            "relative_path": "satellite/rtcoef_rttov13/coef/sccldcoef_meteosat_9_seviri.dat",
+            "size": 696990
+        },
+        {
+            "filename": "moon_pos.dta",
+            "relative_path": "climate/eclipse/moon_pos.dta",
+            "size": 7220925
+        },
+        {
+            "filename": "sun_pos.dta",
+            "relative_path": "climate/eclipse/sun_pos.dta",
+            "size": 1520349
+        },
+        {
+            "filename": "alv_GL",
+            "relative_path": "climate/E923_DATA/SURFACE_G/alv_GL",
+            "size": 518408
+        },
+        {
+            "filename": "rsm_GL",
+            "relative_path": "climate/E923_DATA/SURFACE_G/rsm_GL",
+            "size": 518408
+        },
+        {
+            "filename": "z0v_GL",
+            "relative_path": "climate/E923_DATA/SURFACE_G/z0v_GL",
+            "size": 518408
+        },
+        {
+            "filename": "vgx_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/vgx_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "rsm_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/rsm_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "msk_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/msk_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "z0v_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/z0v_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "itp_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/itp_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "alv_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/alv_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "dpr_HR",
+            "relative_path": "climate/E923_DATA/SURFACE_L/dpr_HR",
+            "size": 2889608
+        },
+        {
+            "filename": "N108_GL",
+            "relative_path": "climate/E923_DATA/N108/N108_GL",
+            "size": 29180736
+        },
+        {
+            "filename": "abc_quadra_02",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_02",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_07",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_07",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_03",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_03",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_04",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_04",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_05",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_05",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_12",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_12",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_08",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_08",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_10",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_10",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_01",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_01",
+            "size": 388944
+        },
+        {
+            "filename": "abc_quadra_09",
+            "relative_path": "climate/E923_DATA/abc_O3/abc_quadra_09",
+            "size": 388944
+        },
+        {
+            "filename": "aero.camscms.m05_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m05_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m12_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m12_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m03_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m03_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m10_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m10_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m02_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m02_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m04_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m04_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m01_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m01_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m09_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m09_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m08_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m08_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.camscms.m07_GL",
+            "relative_path": "climate/E923_DATA/aero_camscms/aero.camscms.m07_GL",
+            "size": 22815458
+        },
+        {
+            "filename": "aero.tegen.m05_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m05_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m08_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m08_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m09_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m09_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m12_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m12_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m07_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m07_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m03_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m03_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m10_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m10_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m02_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m02_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m01_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m01_GL",
+            "size": 132459
+        },
+        {
+            "filename": "aero.tegen.m04_GL",
+            "relative_path": "climate/E923_DATA/aero_tegen/aero.tegen.m04_GL",
+            "size": 132459
+        },
+        {
+            "filename": "GlobalLakeDepth_V3.0.dir",
+            "relative_path": "climate/PGD/GlobalLakeDepth_V3.0.dir",
+            "size": 1866240000
+        },
+        {
+            "filename": "ECOCLIMAP_II_EUROP_V2.6.hdr",
+            "relative_path": "climate/PGD/ECOCLIMAP_II_EUROP_V2.6.hdr",
+            "size": 213
+        },
+        {
+            "filename": "GlobalLakeDepth_V3.0.hdr",
+            "relative_path": "climate/PGD/GlobalLakeDepth_V3.0.hdr",
+            "size": 289
+        },
+        {
+            "filename": "GlobalLakeStatus_V3.0.dir",
+            "relative_path": "climate/PGD/GlobalLakeStatus_V3.0.dir",
+            "size": 933120000
+        },
+        {
+            "filename": "ECOCLIMAP_II_EUROP_V2.6.dir",
+            "relative_path": "climate/PGD/ECOCLIMAP_II_EUROP_V2.6.dir",
+            "size": 1866240000
+        },
+        {
+            "filename": "GlobalLakeStatus_V3.0.hdr",
+            "relative_path": "climate/PGD/GlobalLakeStatus_V3.0.hdr",
+            "size": 651
+        },
+        {
+            "filename": "ecoclimapI_covers_param.bin",
+            "relative_path": "climate/ecoclimap/ecoclimapI_covers_param.bin",
+            "size": 877760
+        },
+        {
+            "filename": "ecoclimapII_af_covers_param.bin",
+            "relative_path": "climate/ecoclimap/ecoclimapII_af_covers_param.bin",
+            "size": 297120
+        },
+        {
+            "filename": "ecoclimapII_eu_covers_param.bin",
+            "relative_path": "climate/ecoclimap/ecoclimapII_eu_covers_param.bin",
+            "size": 4529440
+        },
+        {
+            "filename": "CLYPPT_1_6_f_byte.tif",
+            "relative_path": "climate/SOILGRID/CLYPPT_1_6_f_byte.tif",
+            "size": 1408398025
+        },
+        {
+            "filename": "SOC_TOP_SOILGRID_Int16.tif",
+            "relative_path": "climate/SOILGRID/SOC_TOP_SOILGRID_Int16.tif",
+            "size": 3157943337
+        },
+        {
+            "filename": "SOC_SUB_SOILGRID_Int16.tif",
+            "relative_path": "climate/SOILGRID/SOC_SUB_SOILGRID_Int16.tif",
+            "size": 3699944411
+        },
+        {
+            "filename": "SNDPPT_1_6_f_byte.tif",
+            "relative_path": "climate/SOILGRID/SNDPPT_1_6_f_byte.tif",
+            "size": 1688995150
+        },
+        {
+            "filename": "ALB_SAT_NI_0405_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0405_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0105_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0105_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_NI_0805_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0805_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0205_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0205_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_NI_0115_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0115_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0805_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0805_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0205_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0205_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0405_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0405_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0405_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0405_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0405_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0405_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0205_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0205_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0905_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0905_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_NI_0105_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0105_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0805_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0805_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0205_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0205_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0115_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0115_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0115_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0115_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0905_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0905_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0905_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0905_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_VI_0905_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0905_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_VI_0105_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_VI_0105_c.hdr",
+            "size": 216
+        },
+        {
+            "filename": "ALB_SAT_NI_0805_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0805_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_NI_0105_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0105_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "ALB_SAT_NI_0115_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/ALB_SAT/ALB_SAT_NI_0115_c.dir",
+            "size": 5483202346
+        },
+        {
+            "filename": "LAI_SAT_0105_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0105_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "LAI_SAT_0905_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0905_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0205_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0205_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "LAI_SAT_0805_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0805_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0405_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0405_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0805_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0805_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "LAI_SAT_0105_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0105_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0205_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0205_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0115_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0115_c.dir",
+            "size": 3053706926
+        },
+        {
+            "filename": "LAI_SAT_0905_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0905_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "LAI_SAT_0115_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0115_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "LAI_SAT_0405_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0405_c.hdr",
+            "size": 212
+        },
+        {
+            "filename": "ecosg_final_map.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/COVER/ecosg_final_map.hdr",
+            "size": 115
+        },
+        {
+            "filename": "ecosg_final_map.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/COVER/ecosg_final_map.dir",
+            "size": 8398080000
+        },
+        {
+            "filename": "new_ht_c.dir",
+            "relative_path": "climate/ECOCLIMAP-SG/HT/new_ht_c.dir",
+            "size": 1610853864
+        },
+        {
+            "filename": "new_ht_c.hdr",
+            "relative_path": "climate/ECOCLIMAP-SG/HT/new_ht_c.hdr",
+            "size": 142
+        },
+        {
+            "filename": "oro_T2559_F2250",
+            "relative_path": "IFS_gridpoint_orography/oro_T2559_F2250",
+            "size": 81001300
+        },
+        {
+            "filename": "greenhouse_gas_climatology_46r1.nc",
+            "relative_path": "ncdir/greenhouse_gas_climatology_46r1.nc",
+            "size": 2240764
+        },
+        {
+            "filename": "fu_ice_scattering_rrtm.nc",
+            "relative_path": "ncdir/fu_ice_scattering_rrtm.nc",
+            "size": 3280
+        },
+        {
+            "filename": "greenhouse_gas_timeseries_CMIP3_A1B_46r1.nc",
+            "relative_path": "ncdir/greenhouse_gas_timeseries_CMIP3_A1B_46r1.nc",
+            "size": 10196
+        },
+        {
+            "filename": "greenhouse_gas_climatology_48r1.nc",
+            "relative_path": "ncdir/greenhouse_gas_climatology_48r1.nc",
+            "size": 2241000
+        },
+        {
+            "filename": "aerosol_ifs_rrtm_48R1_v2.nc",
+            "relative_path": "ncdir/aerosol_ifs_rrtm_48R1_v2.nc",
+            "size": 127388
+        },
+        {
+            "filename": "mcica_gamma.nc",
+            "relative_path": "ncdir/mcica_gamma.nc",
+            "size": 333472
+        },
+        {
+            "filename": "aerosol_cams_climatology_43R3_3D.nc",
+            "relative_path": "ncdir/aerosol_cams_climatology_43R3_3D.nc",
+            "size": 274067232
+        },
+        {
+            "filename": "aerosol_cams_climatology_43R3a.nc",
+            "relative_path": "ncdir/aerosol_cams_climatology_43R3a.nc",
+            "size": 3868576
+        },
+        {
+            "filename": "nielsen_droplet_scattering_rrtm.nc",
+            "relative_path": "ncdir/nielsen_droplet_scattering_rrtm.nc",
+            "size": 14247
+        }
+    ]
+}
