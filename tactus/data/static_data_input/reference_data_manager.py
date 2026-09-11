@@ -116,43 +116,76 @@ def report(missing_files, unknown_files, key_mismatch):
     else:
         print("# No file with incorrect size")
 
-def to_tar(missing_files, key_mismatch, from_folder, tar_file,force_update):
+def diff(json_file, other_json_file,force_update):
+   with open(json_file, "r") as f:
+        data = json.load(f)
+   reference_folder = data["folder"]
+
+   with open(other_json_file, "r") as f:
+        other_data = json.load(f)
+   other_reference_folder = data["folder"]
+
+   other_files = set()
+   for other_file in other_data["files"]:
+       other_files.add(other_file["filename"])
+   expected_files = {f["relative_path"]: f for f in data["files"]}
+
+   for relative_path, expected in expected_files.items():
+        file_path = os.path.join(reference_folder, relative_path)
+        if not os.path.exists(file_path):
+            print(f"Warning: missing file {file_path}")
+        else:
+            if (relative_path not in other_files):
+                print(file_path)
+
+def dump(json_file):
+   with open(json_file, "r") as f:
+        data = json.load(f)
+   reference_folder = data["folder"]
+
+   expected_files = {f["relative_path"]: f for f in data["files"]}
+
+   for relative_path, expected in expected_files.items():
+        file_path = os.path.join(reference_folder, relative_path)
+        if not os.path.exists(file_path):
+            print(f"Error: missing file {file_path}")
+            exit(0)
+        print(file_path)
+
+
     # Report results
-    files = []
-    if missing_files:
-        print(f"# Missing files ({len(missing_files)}):")
-        for file in missing_files:
-                files.append(f"{from_folder}{file}")
+    #files = []
+    #if missing_files:
+     #   print(f"# Missing files ({len(missing_files)}):")
+      #  for file in missing_files:
+       #         files.append(f"{from_folder}{file}")
 
-    if key_mismatch:
-        if not force_update:
-            print(
-                "# Warning: files with incorrect size found, but not command \
-                will be generated for them.\
-                Use --force_update if you want to override them."
-            )
+   # if key_mismatch:
+    #    if not force_update:
+     #       print(
+      #          "# Warning: files with incorrect size found, but not command \
+       #         will be generated for them.\
+        #        Use --force_update if you want to override them."
+         #   )
 
-        print(f"# Files with incorrect size ({len(key_mismatch)}):")
-        for file, actual_key, expected_key in key_mismatch:
-            if force_update:
-                files.append(f"{from_folder}{file}")
-            else:
-                print(f"# Skipping - {to_folder}/{file} has inconsistent size")
+        #print(f"# Files with incorrect size ({len(key_mismatch)}):")
+       # for file, actual_key, expected_key in key_mismatch:
+        #    if force_update:
+         #       files.append(f"{from_folder}{file}")
+          #  else:
+           #     print(f"# Skipping - {to_folder}/{file} has inconsistent size")
 
-    print(f'tar cfv {tar_file} {" ".join(files)}')
+    #print(f'tar cfv {tar_file} {" ".join(files)}')
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
-    parser.add_argument("--create", action="store_true", help="convert txt to json")
-    parser.add_argument("--status", action="store_true", help="check status")
-
-    parser.add_argument("--folder", help="The folder to process.")
 
     parser.add_argument(
-        "--file_list", help="Path to required file of allowed files and folders.", default=None
+        "--generate_from", help="Path to required file of allowed files and folders.", default=None
     )
+    parser.add_argument("--checkdir", help="check directory against jason", default=None)
     parser.add_argument("--json", help="JSON file", default=None)
-    parser.add_argument("--tar", help="tar file", default=None)
+    parser.add_argument("--diff", help="other json file", default=None)
 
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore_list", help="JSON file", default=None)
@@ -160,25 +193,19 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
-    print(args)
     if not args.json:
         print("Please provide a json file name")
         sys.exit(1)
 
-    if args.create:
-       if not args.file_list:
-            print("Please provide a file containing file list")
-            sys.exit(1)
-
+    if args.generate_from:
        generate_json(args.file_list, args.json, args.folder,args.verbose)
+    elif args.checkdir:
+       missing_files, unknown_files, key_mismatch = validate(args.json, args.check_dir, args.ignore_list, args.verbose)
+       report(missing_files, unknown_files, key_mismatch)
+    elif args.diff:
+        diff(args.json,args.diff, args.force_update)
     else:
-        if args.status:
-            missing_files, unknown_files, key_mismatch = validate(args.json, args.folder, args.ignore_list, args.verbose)
-            report(missing_files, unknown_files, key_mismatch)
-        if args.tar :
-            missing_files, unknown_files, key_mismatch = validate(args.json, args.folder, args.ignore_list, args.verbose)
-            to_tar(missing_files,key_mismatch,args.folder, args.tar,args.force_update)
-
+        dump(args.json)
 
 if __name__ == "__main__":
     main()
