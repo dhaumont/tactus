@@ -10,18 +10,20 @@ from pathspec import PathSpec
 
 def get_files_from_list(input_file, root_folder, verbose):
     files = []
+    print("get_files_from_list:")
+    print(f"input_file: {input_file}")
     lines = Path(input_file).read_text().splitlines()
-    files_list = PathSpec.from_lines("gitwildmatch", lines)
-    for filename in files_list:
+    print(f"lines: {lines}")
+    for filename in lines:
         file_path = os.path.join(root_folder,filename)
-        if os.path.exists(file_path):
+        if  os.path.exists(file_path):
             file_size = os.path.getsize(file_path)
             relative_path = os.path.relpath(file_path, root_folder)
             files.append({"filename": filename, "relative_path": relative_path, "size": file_size})
             if verbose:
                 print(f"{filename}, {file_size}")
         else:
-            print(f"Warning: {filename} not found in {root_folder}")
+            print(f"Warning: skip {filename}: file not found in folder {root_folder}")
 
     return files
 
@@ -157,9 +159,9 @@ def copy(missing_files, key_mismatch,from_folder, to_folder,force_update, scp_ho
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
-    parser.add_argument("--create", action="store_false", help="convert txt to json")
-    parser.add_argument("--status", action="store_false", help="check status")
-    parser.add_argument("--copy", action="store_false", help="check status")
+    parser.add_argument("--create", action="store_true", help="convert txt to json")
+    parser.add_argument("--status", action="store_true", help="check status")
+    parser.add_argument("--copy", action="store_true", help="check status")
 
     parser.add_argument("--folder", help="The folder to process.")
 
@@ -167,6 +169,7 @@ def main():
         "--file_list", help="Path to required file of allowed files and folders.", default=None
     )
     parser.add_argument("--json", help="JSON file", default=None)
+    parser.add_argument("--force_update", action="store_true", help="verbose mode")
 
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
     parser.add_argument(
