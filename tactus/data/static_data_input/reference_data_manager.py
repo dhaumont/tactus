@@ -29,7 +29,6 @@ def get_files_from_list(input_file, root_folder, verbose):
 
 def generate_json(input_file, output_json, root_folder, verbose):
 
-    files = get_files_from_list(input_file, root_folder, verbose)
 
     data = {"folder": root_folder, "files": files}
 
@@ -181,7 +180,7 @@ def main():
     parser = argparse.ArgumentParser(description="File validation script.")
 
     parser.add_argument(
-        "--generate_from", help="Path to required file of allowed files and folders.", default=None
+        "--from_list", help="Path to required file of allowed files and folders.", default=None
     )
     parser.add_argument("--checkdir", help="check directory against jason", default=None)
     parser.add_argument("--json", help="JSON file", default=None)
@@ -197,8 +196,12 @@ def main():
         print("Please provide a json file name")
         sys.exit(1)
 
-    if args.generate_from:
-       generate_json(args.file_list, args.json, args.folder,args.verbose)
+    if args.from_list:
+       files = get_files_from_list(args.file_list, args.folder, verbose)
+       generate_json(files, args.json, args.folder,args.verbose)
+    elif args.from_dir:
+       files = get_files_from_dir(args.from_dir, args.folder, verbose)
+       generate_json(files, args.json, args.folder,args.verbose)
     elif args.checkdir:
        missing_files, unknown_files, key_mismatch = validate(args.json, args.check_dir, args.ignore_list, args.verbose)
        report(missing_files, unknown_files, key_mismatch)
