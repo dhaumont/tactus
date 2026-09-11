@@ -42,12 +42,11 @@ def get_verification_key(file_path):
     """Return the key used to check file consistency."""
     return os.path.getsize(file_path)
 
-def validate(json_file, folder_path, ignore_list = None, verbose = False):
+def validate(json_file, folder_path, ignore_list, verbose):
     """Validate files listed in the JSON."""
     with open(json_file, "r") as f:
         data = json.load(f)
     reference_folder = data["folder"]
-    target_folder = folder_path
 
     expected_files = {f["relative_path"]: f for f in data["files"]}
 
@@ -89,7 +88,7 @@ def validate(json_file, folder_path, ignore_list = None, verbose = False):
 
             if relative_path not in expected_files:
                 unknown_files.append(relative_path)
-    return reference_folder, target_folder,missing_files, unknown_files, key_mismatch
+    return missing_files, unknown_files, key_mismatch
 
 def report(missing_files, unknown_files, key_mismatch):
     # Report results
@@ -117,23 +116,13 @@ def report(missing_files, unknown_files, key_mismatch):
     else:
         print("# No file with incorrect size")
 
-def copy(missing_files, key_mismatch,from_folder, to_folder,force_update, scp_host = None):
+def to_tar(missing_files, key_mismatch, from_folder, tar_file,force_update):
     # Report results
-
+    files = []
     if missing_files:
         print(f"# Missing files ({len(missing_files)}):")
         for file in missing_files:
-                dir_name = os.path.dirname(f"{to_folder}/{file}")
-                if scp_host:
-                    print(
-                        f"mkdir -p {dir_name}; scp {scp_host}:{from_folder}/{file} \
-                        {to_folder}/{file}"
-                    )
-                else:
-                    print(
-                        f"mkdir -p {dir_name}; ln -s {from_folder}/{file} \
-                        {to_folder}/{file}"
-                    )
+                files.append(f"{from_folder}{file}")
 
     if key_mismatch:
         if not force_update:
@@ -146,22 +135,16 @@ def copy(missing_files, key_mismatch,from_folder, to_folder,force_update, scp_ho
         print(f"# Files with incorrect size ({len(key_mismatch)}):")
         for file, actual_key, expected_key in key_mismatch:
             if force_update:
-                if scp_host:
-                    print(
-                        f"scp {scp_host}:{from_folder}/{file} \
-                        {to_folder}/{file}"
-                    )
-                else:
-                    print(f"cp {from_folder}/{file} {to_folder}/{file}")
+                files.append(f"{from_folder}{file}")
             else:
                 print(f"# Skipping - {to_folder}/{file} has inconsistent size")
 
+    print(f'tar cfv {tar_file} {" ".join(files)}')
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
     parser.add_argument("--create", action="store_true", help="convert txt to json")
     parser.add_argument("--status", action="store_true", help="check status")
-    parser.add_argument("--copy", action="store_true", help="check status")
 
     parser.add_argument("--folder", help="The folder to process.")
 
@@ -169,26 +152,18 @@ def main():
         "--file_list", help="Path to required file of allowed files and folders.", default=None
     )
     parser.add_argument("--json", help="JSON file", default=None)
+    parser.add_argument("--tar", help="tar file", default=None)
+
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
+    parser.add_argument("--ignore_list", help="JSON file", default=None)
 
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
-    parser.add_argument(
-        "--scp_host", help="Generate scp instructions if you provide an scp host with cmd"
-    )
 
     args = parser.parse_args()
     print(args)
     if not args.json:
         print("Please provide a json file name")
         sys.exit(1)
-
-    if not args.folder:
-        print("Please provide a folder")
-        sys.exit(1)
-
-    if args.scp_host and not args.cmd:
-        print("Warning: --scp_host is ignored without the --cmd argument.")
-
 
     if args.create:
        if not args.file_list:
@@ -197,11 +172,12 @@ def main():
 
        generate_json(args.file_list, args.json, args.folder,args.verbose)
     else:
-        reference_folder, target_folder, missing_files, unknown_files, key_mismatch = validate(args.json, args.folder)
         if args.status:
+            missing_files, unknown_files, key_mismatch = validate(args.json, args.folder, args.ignore_list, args.verbose)
             report(missing_files, unknown_files, key_mismatch)
-        if args.copy:
-            copy(missing_files,key_mismatch,reference_folder, target_folder,args.force_update, args.scp_host)
+        if args.tar :
+            missing_files, unknown_files, key_mismatch = validate(args.json, args.folder, args.ignore_list, args.verbose)
+            to_tar(missing_files,key_mismatch,args.folder, args.tar,args.force_update)
 
 
 if __name__ == "__main__":
