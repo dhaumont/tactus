@@ -110,10 +110,13 @@ def diff(data, other_data,verbose):
 def check_dir(json_file, dir, ignore_list, verbose):
     """check_dir files listed in the JSON."""
         
-    other_data = get_dict_from_dir(dir, verbose)
-        
     with open(json_file, "r") as f:
         data = json.load(f)
+
+    if dir is None:
+        folder = dir if dir else data["folder"]
+        
+    other_data = get_dict_from_dir(folder, verbose)        
     
     missing_files, unknow_files, key_mistmatch = diff(data,other_data,verbose)
     return missing_files, unknow_files, key_mistmatch
@@ -182,43 +185,65 @@ def main():
     parser = argparse.ArgumentParser(description="File validation script.")
 
     
-    parser.add_argument("--check_dir", help="check directory against json", default=None)    
-    parser.add_argument("--append", help="other json file", default=None)
-    parser.add_argument("--diff", help="other json file", default=None)
-    parser.add_argument("--remove", help="other json file", default=None)
-    parser.add_argument("--json", help="JSON file", default=None)
-    parser.add_argument("--from_dir", help="Create a json file with the content of the directory", default=None)
-    parser.add_argument("--from_list", help="Create a json file with the content of the files in the list", default=None)
-    parser.add_argument("--output", help="Output JSON file", default=None)
-    parser.add_argument("--root", help="Root folder", default=None)
+    parser.add_argument("action", choices=['diff','show','add','rm','create'], default = 'list')
+    parser.add_argument("json", help="JSON file", default='reference.json')            
+    parser.add_argument("--root", help="Root folder", default = None)
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
-    parser.add_argument("--ignore_list", help="JSON file", default=None)
-
+    parser.add_argument("--ignore", help="list of ignore files", default=None)
+    parser.add_argument("--allow", help="list of green files", default=None)
+    parser.add_argument("--other", help="compare with other", default=None)
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
     if not args.json:
         print("Please provide a json file name")
         sys.exit(1)
+    
+    for path in [args.root, args.allow, args.ignore, args.other]:
+        if path and not os.path.exists(path):
+            print(f"ERROR {path} not found")
+            sys.exit(1)
+    
+    if args.action == 'create':
+        if not args.root:
+            print("Error: please provide a root folder")            
+            sys.exit(1)
+        
+        if args.allow:
+            data = get_dict_from_flat_list(args.allow, args.root, args.verbose)
+        else:    
+            data = get_dict_from_dir(args.root, args.verbose)
 
-    if args.from_list:
-       data = get_dict_from_flat_list(args.file_list, args.root, args.verbose)
-       write_json(data, args.json)
-    elif args.from_dir:
-       data = get_dict_from_dir(args.from_dir, args.verbose)
-       write_json(data, args.json)
-    elif args.check_dir:
-       missing_files, unknown_files, key_mismatch = check_dir(args.json, args.check_dir, args.ignore_list, args.verbose)
-       report_as_git(missing_files, unknown_files, key_mismatch)
-    elif args.diff:
-       missing_files, unknown_files, key_mismatch = diff_json(args.json, args.diff, args.verbose)
-       report_as_git(missing_files, unknown_files, key_mismatch)
-    elif args.append:
-        append(args.json,args.append, args.output, args.force_update)
-    elif args.remove:
-        remove(args.json,args.remove, args.output, args.force_update)    
-    else:
+        if args.ignore:
+            ignored_data = get_dict_from_flat_list(args.ignore, args.root, args.verbose)
+            remove_op(data, ignored_data, args.force_update)            
+        
+        write_json(data, args.json)
+    
+    elif args.action == 'diff':
+        if not args.other:
+            print("Error: --other argument missing (it can be a directory or a json file)")
+            sys.exit(1)
+            
+        if os.path.isdir(args.other):
+            missing_files, unknown_files, key_mismatch = check_dir(args.json, args.other, args.ignore_list, args.verbose)            
+        else:
+           missing_files, unknown_files, key_mismatch = diff_json(args.json, args.other, args.verbose)                     
+        
+        report_as_git(missing_files, unknown_files, key_mismatch)
+    elif args.action in ['add','rm']:
+        if not args.other:
+            print("Error: --other argument missing (json file)")
+            sys.exit(1)                
+        if os.path.isdir(args.other):
+            print(f"Error: {args.other} is a directotry")
+            sys.exit(1)
+        if args.action == "add":
+            append(args.json,args.other, args.json, args.force_update)
+        else:    
+            remove(args.json,args.other, args.json, args.force_update)    
+    elif args.action == 'show':
         list_content(args.json)
 
 if __name__ == "__main__":
