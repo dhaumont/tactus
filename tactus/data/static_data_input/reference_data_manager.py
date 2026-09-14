@@ -164,10 +164,10 @@ def compare_json_to_json(json_file, other_json_file, verbose):
     return result
 
 def create(json_file, root_folder, allow_list, ignore_list, verbose):
-    if allow_list:
-        allowed = get_files_from_flat_list(allow_list, verbose)
-    if ignore_list:
-        ignored = get_files_from_flat_list(ignore_list, verbose)
+    
+    allowed = get_files_from_flat_list(allow_list, verbose) if allow_list else None
+    
+    ignored = get_files_from_flat_list(ignore_list, verbose) if ignore_list else None
             
     data = get_dict_from_dir(root_folder, allowed, ignored, verbose)   
     write_json(data, json_file)
