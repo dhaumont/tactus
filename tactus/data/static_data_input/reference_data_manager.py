@@ -205,26 +205,33 @@ def remove(json_file, other_json_file,result_json_file, force_update):
 
 def check_parse_arguments(args):
     errors = []
-    if not args.json:
+    if not args.input:
         errors.append("json missing")
+    
+    if args.action in ['create','add','rm','diff']:
+        if len(args.input) < 2:
+            errors.append('Not enough parameters provided')
+            return errors
             
-    for path in [args.parameter, args.allow, args.ignore]:
-        if path and path != "auto" : 
-            if os.path.exists(path):
-                errors.append(f'\"{path}\" not found')
+    parameter_list = args.input.copy()
+    parameter_list.extend([args.allow, args.ignore])    
+    for path in parameter_list:
+        if path and not os.path.exists(path):
+            errors.append(f'\"{path}\" not found')
                 
     if args.action == 'create':
-        if not os.path.isdir(args.parameter):
-            errors.append(f"{args.parameter} is not a directory")
+        if not os.path.isdir(args.input[1]):
+            errors.append(f"{args.input[1]} is not a directory")
             
     elif args.action in ['add','rm','diff']:
-        if os.path.isdir(args.parameter):
-            errors.append(f"{args.parameter} is a directory")
+        if os.path.isdir(args.input[1]):
+            errors.append(f"{args.input[1]} is a directory")
             
-    elif args.action == 'status':
-        if args.parameter:
-             if args.parameter != "auto" and not os.path.isdir(args.parameter):
-                errors.append(f"{args.parameter} is not a directory")
+    elif args.action == 'status':        
+        if len(args.input) > 1:
+            directory = args.input[1]
+            if not os.path.isdir(directory):
+                errors.append(f"{directory} is not a directory")
     return errors
 
 def main():
@@ -233,8 +240,8 @@ def main():
 
     
     parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')
-    parser.add_argument("json", help="JSON file", default='reference.json')            
-    parser.add_argument("parameter", help="Command parameter", default = "auto")
+    #parser.add_argument("json", help="JSON file", default='reference.json')            
+    parser.add_argument("input", help="Command parameter", nargs='+')
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
@@ -243,6 +250,7 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
+    print(args.input)
     errors = check_parse_arguments(args)
     if len(errors) > 0:
         print("Error(s) detected:")
@@ -260,23 +268,22 @@ def main():
             ignored_data = get_dict_from_flat_list(args.ignore, args.parameter, args.verbose)
             remove_op(data, ignored_data, args.force_update)            
         
-        write_json(data, args.json)
+        write_json(data, args.input)
     
-    elif args.action == 'status': 
-        
-        directory = None if args.parameter == "auto" else args.parameter
-        result = compare_json_to_dir(args.json, directory, args.ignore, args.verbose)            
+    elif args.action == 'status':         
+        directory = None if len(args.input) <= 1 else args.input[1]
+        result = compare_json_to_dir(args.input[0], directory, args.ignore, args.verbose)            
         report_as_git(result)
     elif args.action == 'diff':        
-        result = compare_json_to_json(args.json, args.parameter, args.verbose)        
+        result = compare_json_to_json(args.input[0],args.input[1], args.verbose)        
         report_as_git(result)
     elif args.action in ['add','rm']:        
         if args.action == "add":
-            append(args.json,args.parameter, args.json, args.force_update)
+            append(args.input[0],args.input[1], args.input[0], args.force_update)
         else:    
-            remove(args.json,args.parameter, args.json, args.force_update)    
+            remove(args.input[0],args.input[1], args.input[0], args.force_update)    
     elif args.action == 'show':
-        list_content(args.json)
+        list_content(args.input)
 
 if __name__ == "__main__":
     main()
