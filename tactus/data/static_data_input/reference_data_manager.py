@@ -22,15 +22,24 @@ def append_file_to_list(files, file_path, filename, root_folder, verbose):
         relative_path = os.path.relpath(file_path, root_folder)
         files.append({"filename": filename, "relative_path": relative_path, "size": file_size})
         if verbose:
-            print(f"{filename}, {file_size}")
+            print(f"{relative_path}, {file_size}")
     else:
         print(f"Warning: skip {filename}: file not found in folder {root_folder}")
         
 def get_dict_from_dir(input_folder, verbose):
     files = []
+    seen = set()
+    
+    
     for root, dirs, filenames in os.walk(input_folder, followlinks=True):
+        if root in seen:
+            print(f"# Warning: circular dependency detected: {root} ")
+            continue
+        seen.add(root)
+
         for filename in filenames:
             file_path = os.path.join(root, filename)
+            
             append_file_to_list(files, file_path, filename, input_folder, verbose)
     
     return {"folder": input_folder, "files": files}    
