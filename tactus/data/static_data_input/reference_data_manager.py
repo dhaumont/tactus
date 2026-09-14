@@ -26,35 +26,37 @@ def append_file_to_list(files, file_path, filename, root_folder, verbose):
     else:
         print(f"Warning: skip {filename}: file not found in folder {root_folder}")
         
-def get_dict_from_dir(input_folder, verbose):
+def get_dict_from_dir(input_folder, allowed, ignored, verbose):
     files = []
     seen = set()
-    
-    
+        
     for root, dirs, filenames in os.walk(input_folder, followlinks=True):
         if root in seen:
             print(f"# Warning: circular dependency detected: {root} ")
             continue
+        
         seen.add(root)
 
         for filename in filenames:
-            file_path = os.path.join(root, filename)
-            
+            if ignored and filename in ignored:
+                continue
+            if allowed and not filename in allowed:
+                continue
+            file_path = os.path.join(root, filename)            
             append_file_to_list(files, file_path, filename, input_folder, verbose)
     
     return {"folder": input_folder, "files": files}    
 
-def get_dict_from_flat_list(input_file, root_folder, verbose):
-    files = []
+def get_files_from_flat_list(input_file):
+    files = set()
     print("get_files_from_flat_list:")
     print(f"input_file: {input_file}")
     lines = Path(input_file).read_text().splitlines()
     print(f"lines: {lines}")
     for filename in lines:
-        file_path = os.path.join(root_folder,filename)
-        append_file_to_list(files, file_path, filename, root_folder, verbose)
+        files.add(filename)        
         
-    return {"folder": root_folder, "files": files}    
+    return files
    
    
 def write_json(data, output_json):
@@ -135,14 +137,14 @@ def diff(data, other_data,verbose):
         
     return result
 
-def compare_json_to_dir(json_file, dir, ignore_list, verbose):
+def compare_json_to_dir(json_file, dir, allowed, ignored, verbose):
     """compare_json_to_dir files listed in the JSON."""
         
     with open(json_file, "r") as f:
         data = json.load(f)
     
     folder = dir if dir else data["folder"]        
-    other_data = get_dict_from_dir(folder, verbose)        
+    other_data = get_dict_from_dir(folder, allowed, ignored, verbose)        
     
     result = diff(data,other_data,verbose)
     result.left = json_file
@@ -161,6 +163,15 @@ def compare_json_to_json(json_file, other_json_file, verbose):
     result.right = other_json_file
     return result
 
+def create(json_file, root_folder, allow_list, ignore_list, verbose):
+    if allow_list:
+        allowed = get_files_from_flat_list(allow_list, verbose)
+    if ignore_list:
+        ignored = get_files_from_flat_list(ignore_list, verbose)
+            
+    data = get_dict_from_dir(root_folder, allowed, ignored, verbose)   
+    write_json(data, json_file)
+    
 def append_op(data,other_data,force_update):
    
    reverse = reverse_dict(data["files"])
@@ -179,6 +190,7 @@ def remove_op(data,other_data,force_update):
        if relative_path not in other_reverse:
            new_files.append(item)
    data["files"] = new_files
+   
 def list_content(json_file):
    with open(json_file, "r") as f:
         data = json.load(f)
@@ -201,6 +213,9 @@ def boolean_op(operation, json_file, other_json_file,result_json_file,force_upda
    operation(data, other_data, force_update)
     
    write_json(data,result_json_file)
+
+
+
 
 # ---- high level
 
@@ -268,20 +283,10 @@ def main():
         sys.exit(1)
     
     if args.action == 'create':        
-        if args.allow:
-            data = get_dict_from_flat_list(args.allow, args.parameter, args.verbose)
-        else:    
-            data = get_dict_from_dir(args.parameter, args.verbose)
-
-        if args.ignore:
-            ignored_data = get_dict_from_flat_list(args.ignore, args.parameter, args.verbose)
-            remove_op(data, ignored_data, args.force_update)            
-        
-        write_json(data, args.input)
-    
+        create(args,input[0], args.input[1],args.allow, args.ignore, args.verbose)
     elif args.action == 'status':         
         directory = None if len(args.input) <= 1 else args.input[1]
-        result = compare_json_to_dir(args.input[0], directory, args.ignore, args.verbose)            
+        result = compare_json_to_dir(args.input[0], directory, args.allow, args.ignore, args.verbose)            
         report_as_git(result)
     elif args.action == 'diff':        
         result = compare_json_to_json(args.input[0],args.input[1], args.verbose)        
