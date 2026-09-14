@@ -283,7 +283,7 @@ def main():
         sys.exit(1)
     
     if args.action == 'create':        
-        create(args,input[0], args.input[1],args.allow, args.ignore, args.verbose)
+        create(args.input[0], args.input[1],args.allow, args.ignore, args.verbose)
     elif args.action == 'status':         
         directory = None if len(args.input) <= 1 else args.input[1]
         result = compare_json_to_dir(args.input[0], directory, args.allow, args.ignore, args.verbose)            
