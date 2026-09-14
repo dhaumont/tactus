@@ -163,14 +163,13 @@ def append_op(data,other_data,force_update):
            reverse[relative_path] = other
    
 def remove_op(data,other_data,force_update):      
-   
-   reverse = reverse_dict(data["files"])
-   for other in other_data["files"]:
-       relative_path = other["relative_path"]
-       if relative_path in reverse:
-            data["files"].remove(reverse[relative_path])
-            reverse.remove[relative_path]
-   
+   new_files = []
+   other_reverse = reverse_dict(other_data["files"])
+   for item in data["files"]:
+       relative_path = item["relative_path"]   
+       if relative_path not in other_reverse:
+           new_files.append(item)
+   data["files"] = new_files
 def list_content(json_file):
    with open(json_file, "r") as f:
         data = json.load(f)
@@ -209,26 +208,23 @@ def check_parse_arguments(args):
     if not args.json:
         errors.append("json missing")
             
-    for path in [args.root, args.allow, args.ignore, args.other]:
-        if path and not os.path.exists(path):
-            errors.append(f'\"{path}\" not found')
+    for path in [args.parameter, args.allow, args.ignore]:
+        if path and path != "auto" : 
+            if os.path.exists(path):
+                errors.append(f'\"{path}\" not found')
                 
     if args.action == 'create':
-        if not args.root:
-            errors.append("--root missing")
+        if not os.path.isdir(args.parameter):
+            errors.append(f"{args.parameter} is not a directory")
             
-        
-    elif args.action == 'diff':
-        if not args.other:
-            errors.append("--other missing (json file)")
-                        
-    elif args.action in ['add','rm']:
-        if not args.other:
-            errors.append("--other missing (json file)")            
-        if os.path.isdir(args.other):
-            errors.append(f"{args.other} is a directory")
+    elif args.action in ['add','rm','diff']:
+        if os.path.isdir(args.parameter):
+            errors.append(f"{args.parameter} is a directory")
             
-        
+    elif args.action == 'status':
+        if args.parameter:
+             if args.parameter != "auto" and not os.path.isdir(args.parameter):
+                errors.append(f"{args.parameter} is not a directory")
     return errors
 
 def main():
@@ -238,12 +234,12 @@ def main():
     
     parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')
     parser.add_argument("json", help="JSON file", default='reference.json')            
-    parser.add_argument("--root", help="Root folder", default = None)
+    parser.add_argument("parameter", help="Command parameter", default = "auto")
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--allow", help="list of green files", default=None)
-    parser.add_argument("--other", help="compare with other", default=None)
+    
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
@@ -256,28 +252,29 @@ def main():
     
     if args.action == 'create':        
         if args.allow:
-            data = get_dict_from_flat_list(args.allow, args.root, args.verbose)
+            data = get_dict_from_flat_list(args.allow, args.parameter, args.verbose)
         else:    
-            data = get_dict_from_dir(args.root, args.verbose)
+            data = get_dict_from_dir(args.parameter, args.verbose)
 
         if args.ignore:
-            ignored_data = get_dict_from_flat_list(args.ignore, args.root, args.verbose)
+            ignored_data = get_dict_from_flat_list(args.ignore, args.parameter, args.verbose)
             remove_op(data, ignored_data, args.force_update)            
         
         write_json(data, args.json)
     
-    elif args.action == 'status':            
-        directory = args.other if args.other and os.path.isdir(args.other) else None
+    elif args.action == 'status': 
+        
+        directory = None if args.parameter == "auto" else args.parameter
         result = compare_json_to_dir(args.json, directory, args.ignore, args.verbose)            
         report_as_git(result)
     elif args.action == 'diff':        
-        result = compare_json_to_json(args.json, args.other, args.verbose)        
+        result = compare_json_to_json(args.json, args.parameter, args.verbose)        
         report_as_git(result)
     elif args.action in ['add','rm']:        
         if args.action == "add":
-            append(args.json,args.other, args.json, args.force_update)
+            append(args.json,args.parameter, args.json, args.force_update)
         else:    
-            remove(args.json,args.other, args.json, args.force_update)    
+            remove(args.json,args.parameter, args.json, args.force_update)    
     elif args.action == 'show':
         list_content(args.json)
 
