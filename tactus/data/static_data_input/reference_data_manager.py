@@ -47,7 +47,7 @@ def get_dict_from_dir(input_folder, allowed, ignored, verbose):
     
     return {"folder": input_folder, "files": files}    
 
-def get_files_from_flat_list(input_file):
+def get_files_from_flat_list(input_file, verbose):
     files = set()
     print("get_files_from_flat_list:")
     print(f"input_file: {input_file}")
