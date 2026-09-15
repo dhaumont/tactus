@@ -71,12 +71,13 @@ def get_files_from_flat_list(input_files, verbose):
     return list(files)
 
 
-def write_json(data, output_json):
+def write_json(data, output_json, verbose):
 
     with open(output_json, "w") as json_file:
         json.dump(data, json_file, indent=4)
 
-    print(f"JSON file '{output_json}' generated successfully.")
+    if verbose:
+        print(f"JSON file '{output_json}' generated successfully.")
 
 def get_verification_key(file_path):
     """Return the key used to check file consistency."""
@@ -177,7 +178,7 @@ def create_index(output_json, folder, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
 
     data = create_index_dictionary(folder, only_list, ignored_list, verbose)
-    write_json(data,output_json)
+    write_json(data,output_json, verbose)
 
 
 def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
@@ -213,7 +214,7 @@ def create(json_file, root_folder, only_list, ignored_list, verbose):
     ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
 
     data = get_dict_from_dir(root_folder, only, ignored, verbose)
-    write_json(data, json_file)
+    write_json(data, json_file, verbose)
 
 def append_op(data,other_data,force_update):
 
