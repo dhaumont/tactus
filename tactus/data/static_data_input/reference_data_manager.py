@@ -140,13 +140,15 @@ def diff(data, other_data,verbose):
         
     return result
 
-def compare_json_to_dir(json_file, dir, only, ignored, verbose):
+def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
         
     with open(json_file, "r") as f:
         data = json.load(f)
     
     folder = dir if dir else data["folder"]        
+    only = get_files_from_flat_list(only_list, verbose) if only_list else None        
+    ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
     other_data = get_dict_from_dir(folder, only, ignored, verbose)        
     
     result = diff(data,other_data,verbose)
@@ -166,11 +168,11 @@ def compare_json_to_json(json_file, other_json_file, verbose):
     result.right = other_json_file
     return result
 
-def create(json_file, root_folder, only_list, ignore_list, verbose):
+def create(json_file, root_folder, only_list, ignored_list, verbose):
     
     only = get_files_from_flat_list(only_list, verbose) if only_list else None
     
-    ignored = get_files_from_flat_list(ignore_list, verbose) if ignore_list else None
+    ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
             
     data = get_dict_from_dir(root_folder, only, ignored, verbose)   
     write_json(data, json_file)
