@@ -65,9 +65,8 @@ def get_files_from_flat_list(input_files, verbose):
         for filename in lines:
             files.add(filename)      
     
-    print(files)
-    exit(1)
-    return files
+    
+    return list(files)
 
 
 def write_json(data, output_json):
