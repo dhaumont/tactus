@@ -92,20 +92,20 @@ def report_as_git(result : ComparisonResult, long):
         print(f"# No common files between {result.left} and {result.right}. ")
 
     if len(result.missing_files) > 0:
-        print(f"# Missing files in {result.right}: {len(result.missing_files)}")
+        print(f"# Files only in {result.right}: {len(result.missing_files)}")
         if long:
             for file in result.missing_files:
                 print(f"  D {file}")
     else:
-        print(f"# No missing files in {result.right}")
+        print(f"# No files only in {result.left}")
 
     if len(result.unknown_files) > 0:
-        print(f"# Unknown files in {result.left}: {len(result.unknown_files)}")
+        print(f"# Files only in {result.right}: {len(result.unknown_files)}")
         if long:
             for file in result.unknown_files:
                 print(f"  ? {file}")
     else:
-        print(f"# No unknown files in {result.left}")
+        print(f"# No files only in {result.right}")
 
     if len(result.different_files) > 0:
         print(f"# Files with incorrect size: {len(result.different_files)}")
@@ -325,6 +325,7 @@ def main():
         input_files = config_files[platform]["input"]        
         create(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
+        print(f"Comparing {reference_json} and {root_folder}")
         if os.path.exists(root_folder):            
             print(f"Rebuilding index for {root_folder}...")
             create_index(current_index_json,root_folder,None, ignore, args.verbose)
