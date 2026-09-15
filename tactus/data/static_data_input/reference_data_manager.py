@@ -37,7 +37,9 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
         seen = set()
 
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
-            if ignored and ignored.match_file(root):
+            relative_path = os.path.relpath(root, input_folder)
+            if ignored and ignored.match_file(relative_path):
+                print(f"# skip {root} according ignore rule")
                 continue
             if root in seen:
                 print(f"# Warning: circular dependency detected: {root} ")
