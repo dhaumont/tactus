@@ -268,10 +268,8 @@ def check_parse_arguments(args):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
-
     
-    parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')
-    #parser.add_argument("json", help="JSON file", default='reference.json')            
+    parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')    
     parser.add_argument("input", help="Command parameter", nargs='+')
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
@@ -281,7 +279,7 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
-    print(args.input)
+
     errors = check_parse_arguments(args)
     if len(errors) > 0:
         print("Error(s) detected:")
