@@ -1,7 +1,7 @@
 {
     "atos": {
         "root_folder": "/ec/project/accord/tactus",
-        "ignore": "./data/platform/atos/ignore",
+        "ignore": ["./data/platform/atos/ignore"],
         "current_index_json": "./data/platform/atos/current_index.json",
         "reference_json": "./data/platform/atos/reference.json",
         "input": [
@@ -12,7 +12,7 @@
     },
     "lumi": {
         "root_folder": "/ec/project/accord/tactus",
-        "ignore": "./data/platform/lumi/ignore",
+        "ignore": ["./data/platform/lumi/ignore"],
         "current_index_json": "./data/platform/lumi/current_index.json",
         "reference_json": "./data/platform/lumi/reference.json",
         "input": [

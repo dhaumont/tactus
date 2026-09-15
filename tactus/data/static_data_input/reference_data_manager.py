@@ -18,14 +18,12 @@ class ComparisonResult:
         self.different_files = []
 
 def append_file_to_list(files, file_path, filename, root_folder, verbose):
-    if  os.path.exists(file_path):
-        file_size = os.path.getsize(file_path)
-        relative_path = os.path.relpath(file_path, root_folder)
-        files.append({"filename": filename, "relative_path": relative_path, "size": file_size})
-        if verbose:
-            print(f"{relative_path}, {file_size}")
-    else:
-        print(f"Warning: skip {filename}: file not found in folder {root_folder}")
+    file_size = os.path.getsize(file_path) if  os.path.exists(file_path) else -1
+
+    relative_path = os.path.relpath(file_path, root_folder)
+    files.append({"filename": filename, "relative_path": relative_path, "size": file_size})
+    if verbose:
+        print(f"{relative_path}, {file_size}")
 
 def get_dict_from_dir(input_folder, only, ignored, verbose):
     files = []
@@ -56,13 +54,17 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
     return {"folder": input_folder, "files": files}
 
-def get_files_from_flat_list(input_file, verbose):
-    files = []
-    lines = Path(input_file).read_text().splitlines()
+def get_files_from_flat_list(input_files, verbose):
+    print("BEGIN")
+    files = set()
+    print(input_files)
+    for input_file in input_files:
+        print(input_file)
+        lines = Path(input_file).read_text().splitlines()
 
-    for filename in lines:
-       files.append(filename)      
-    
+        for filename in lines:
+            files.add(filename)      
+    print("END")
     return files
 
 
@@ -229,13 +231,13 @@ def list_content(json_file,verbose):
    reference_folder = data["folder"]
 
    for file in data["files"]:
-        relative_path = file["relative_path"]
+        relative_path = file["relative_path"]        
         file_path = os.path.join(reference_folder, relative_path)
         if verbose:
             size = file["size"]
-            print(f"{file_path} {size}")
+            print(f"{reference_folder}/{file_path} {size}")
         else:
-            print(f"{file_path}")
+            print(f"{reference_folder}/{file_path}")
 
 
 def boolean_op(operation, json_file, other_json_file,result_json_file,force_update):
@@ -274,13 +276,12 @@ def main():
     parser = argparse.ArgumentParser(description="File validation script.")
 
     parser.add_argument("action", choices=['status','build_ref','copy','show'])
-    parser.add_argument("platform", choices=['atos','lumi','leonardo'])
-
-    parser.add_argument("--to", choices=['atos','lumi','leonardo'], default=None)
+    parser.add_argument("platforms", choices=['atos','lumi','leonardo'], nargs="+")
+    
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--only", help="list of green files", default=None)
-
+        
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
@@ -292,7 +293,7 @@ def main():
             print(f"  {error}")
         sys.exit(1)
 
-    platform = args.platform
+    platform = args.platforms[0]
     config_files = {}
     with open("./data/config.json", "r") as f:
         config_files = json.load(f)
@@ -301,8 +302,8 @@ def main():
     ignore = config_files[platform]["ignore"]
     current_index_json = config_files[platform]["current_index_json"]
     
-    if args.to:
-        to_platform = args.to
+    if len(args.platforms) > 1:
+        to_platform = args.platforms[1]
         to_root_folder = config_files[to_platform]["root_folder"]
         to_current_index_json  = config_files[to_platform]["current_index_json"]
         to_reference_json  = config_files[to_platform]["reference_json"]
@@ -319,13 +320,11 @@ def main():
         report_as_git(result)
     elif args.action == 'copy':
         result = compare_json_to_json(to_current_index_json, to_reference_json, args.verbose)
-        if args.scp_host:
-            command = f"scp {args.scp_host}:"
-        else:
-            command = "cp "
+        
+        command = "cp "
         generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
-        list_content(reference_json)
+        list_content(reference_json,args.verbose)
 
 if __name__ == "__main__":
     main()
