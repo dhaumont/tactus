@@ -37,7 +37,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
             relative_path = os.path.relpath(root, input_folder)
-            print(root, relative_path)
+            
             if ignored_rule and ignored_rule.match_file(relative_path):
                 print(f"# skip {root} according ignore rule")
                 continue
