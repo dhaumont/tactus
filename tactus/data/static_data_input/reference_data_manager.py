@@ -51,11 +51,9 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     return {"folder": input_folder, "files": files}    
 
 def get_files_from_flat_list(input_file, verbose):
-    files = set()
-    print("get_files_from_flat_list:")
-    print(f"input_file: {input_file}")
+    files = set()    
     lines = Path(input_file).read_text().splitlines()
-    print(f"lines: {lines}")
+        
     for filename in lines:
         files.add(filename)        
         
@@ -196,7 +194,7 @@ def remove_op(data,other_data,force_update):
            new_files.append(item)
    data["files"] = new_files
    
-def list_content(json_file):
+def list_content(json_file,verbose):
    with open(json_file, "r") as f:
         data = json.load(f)
    reference_folder = data["folder"]
@@ -204,7 +202,11 @@ def list_content(json_file):
    for file in data["files"]:
         relative_path = file["relative_path"]
         file_path = os.path.join(reference_folder, relative_path)        
-        print(file_path)
+        if verbose:
+            size = file["size"]
+            print(f"{file_path} {size}")
+        else:
+            print(f"{file_path}")
 
 
 def boolean_op(operation, json_file, other_json_file,result_json_file,force_update):
