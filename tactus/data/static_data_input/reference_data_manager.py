@@ -175,7 +175,7 @@ def create_index(output_json, folder, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
 
     data = create_index_dictionary(folder, only_list, ignored_list, verbose)
-    write_json(data,output_json, verbose)
+    write_json(data,output_json)
 
 
 def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
