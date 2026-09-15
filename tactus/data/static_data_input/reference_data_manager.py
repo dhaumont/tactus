@@ -31,7 +31,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     if only:
         for filename in only:
             if ignored_rule and ignored_rule.match_file(filename):
-                print(f"Error: {filename} is in the ignore list and can't be added")
+                print(f"Warning: {filename} not added, according ignore rule")
                 continue
             file_path = os.path.join(input_folder, filename)
             append_file_to_list(files, file_path, filename, input_folder, verbose)
@@ -42,7 +42,8 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
             relative_path = os.path.relpath(root, input_folder)
             
             if ignored_rule and ignored_rule.match_file(relative_path):
-                print(f"# skip {root} according ignore rule")
+                if verbose:
+                    print(f"# skip {root} according ignore rule")
                 continue
             if root in seen:
                 print(f"# Warning: circular dependency detected: {root} ")
