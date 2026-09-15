@@ -55,7 +55,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     return {"folder": input_folder, "files": files}
 
 def get_files_from_flat_list(input_files, verbose):
-    print("BEGIN")
+    
     files = set()
     print(input_files)
     for input_file in input_files:
@@ -64,7 +64,9 @@ def get_files_from_flat_list(input_files, verbose):
 
         for filename in lines:
             files.add(filename)      
-    print("END")
+    
+    print(files)
+    exit(1)
     return files
 
 
@@ -315,7 +317,8 @@ def main():
         create(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
         if os.path.exists(root_folder):            
-            create_index(current_index_json,root_folder,None,ignore, args.verbose)
+            print(f"Rebuilding index for {root_folder}...")
+            create_index(current_index_json,root_folder,None, ignore, args.verbose)
         else:
             print(f"WARNING - Index could not be rebuild, {root_folder} not found")
             print(f"          Using previous index which might be outdated")
