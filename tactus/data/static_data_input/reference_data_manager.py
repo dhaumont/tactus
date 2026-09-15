@@ -80,12 +80,12 @@ def get_verification_key(file_path):
     """Return the key used to check file consistency."""
     return os.path.getsize(file_path)
 
-def report_as_git(result : ComparisonResult, verbose, short):
+def report_as_git(result : ComparisonResult, long):
     # report_as_git results
-
+        
     if len(result.common_files) > 0:
         print(f"# Common files in {result.left} and {result.right}: {len(result.common_files)}")
-        if not short and verbose:
+        if long:
             for file in result.common_files:
                 print(f"{file}")
     else:
@@ -93,7 +93,7 @@ def report_as_git(result : ComparisonResult, verbose, short):
 
     if len(result.missing_files) > 0:
         print(f"# Missing files in {result.right}: {len(result.missing_files)}")
-        if not short:
+        if long:
             for file in result.missing_files:
                 print(f"  D {file}")
     else:
@@ -101,7 +101,7 @@ def report_as_git(result : ComparisonResult, verbose, short):
 
     if len(result.unknown_files) > 0:
         print(f"# Unknown files in {result.left}: {len(result.unknown_files)}")
-        if not short:
+        if long:
             for file in result.unknown_files:
                 print(f"  ? {file}")
     else:
@@ -109,13 +109,15 @@ def report_as_git(result : ComparisonResult, verbose, short):
 
     if len(result.different_files) > 0:
         print(f"# Files with incorrect size: {len(result.different_files)}")
-        if not short:
+        if long:
             for file, actual_key, expected_key in result.different_files:
                 print(f"  M {file} (expected: {expected_key}, found: {actual_key})")
 
     else:
         print("# No file with incorrect size")
-
+    
+    print("Use status --long to get more details")
+    
 def generate_copy_commands(result : ComparisonResult,command, input_folder, output_folder):
         
         for file in result.missing_files:
@@ -289,7 +291,7 @@ def main():
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--only", help="list of green files", default=None)
-    parser.add_argument("--short", action="store_true", help="short mode")
+    parser.add_argument("--long", action="store_true", help="long mode")
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
@@ -329,16 +331,16 @@ def main():
             print(f"WARNING - Index could not be rebuild, {root_folder} not found")
             print(f"          Using previous index which might be outdated")
         result = compare_json_to_json(reference_json, current_index_json, args.verbose)
-        report_as_git(result, args.verbose, args.short)
+        report_as_git(result, args.long)
     elif args.action == 'diff':
         result = compare_json_to_json(reference_json,to_reference_json, args.verbose)
-        report_as_git(result, args.verbose, args.short)
+        report_as_git(result, args.long)
     elif args.action == 'copy':
         result = compare_json_to_json(to_reference_json,to_current_index_json, args.verbose)        
         command = "cp "
         generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
-        list_content(reference_json,args.verbose, args.short)
+        list_content(reference_json,args.verbose, args.long)
 
 if __name__ == "__main__":
     main()
