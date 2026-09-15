@@ -174,7 +174,7 @@ def create_index_dictionary(folder, only_list, ignored_list, verbose):
 
     return data
 
-def create_index(output_json, folder, only_list, ignored_list, verbose):
+def build_file_index(output_json, folder, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
 
     data = create_index_dictionary(folder, only_list, ignored_list, verbose)
@@ -207,7 +207,7 @@ def compare_json_to_json(json_file, other_json_file, verbose):
     result.right = other_json_file
     return result
 
-def create(json_file, root_folder, only_list, ignored_list, verbose):
+def build_reference(json_file, root_folder, only_list, ignored_list, verbose):
 
     only = get_files_from_flat_list(only_list, verbose) if only_list else None
 
@@ -217,7 +217,7 @@ def create(json_file, root_folder, only_list, ignored_list, verbose):
     write_json(data, json_file)
     print(f"JSON file '{json_file}' generated successfully.")
     
-def append_op(data,other_data,force_update):
+def append(data,other_data,force_update):
 
    reverse = reverse_dict(data["files"])
    for other in other_data["files"]:
@@ -227,7 +227,7 @@ def append_op(data,other_data,force_update):
            data["files"].append(other)
            reverse[relative_path] = other
 
-def remove_op(data,other_data,force_update):
+def remove(data,other_data,force_update):
    new_files = []
    other_reverse = reverse_dict(other_data["files"])
    for item in data["files"]:
@@ -250,35 +250,13 @@ def list_content(json_file,verbose):
         else:
             print(f"{reference_folder}/{file_path}")
 
-
-def boolean_op(operation, json_file, other_json_file,result_json_file,force_update):
-
-   with open(json_file, "r") as f:
-        data = json.load(f)
-
-   with open(other_json_file, "r") as f:
-        other_data = json.load(f)
-
-   operation(data, other_data, force_update)
-
-   write_json(data,result_json_file)
-
-
-
-
-# ---- high level
-
-def append(json_file, other_json_file, result_json_file, force_update):
-    boolean_op(append_op,json_file, other_json_file,result_json_file, force_update)
-
-def remove(json_file, other_json_file,result_json_file, force_update):
-    boolean_op(remove_op,json_file, other_json_file, result_json_file, force_update)
-
 # ---- Main folder
 
 def check_parse_arguments(args):
     errors = []
-    
+    if args.action == 'diff':
+         if len(args.platforms) < 2:
+            errors.append(f"diff require two platforms")
     return errors
 
 
@@ -323,12 +301,12 @@ def main():
             print(f"Error - {root_folder} not found")
             exit(1)
         input_files = config_files[platform]["input"]        
-        create(reference_json, root_folder, input_files, ignore, args.verbose)
+        build_reference(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
         print(f"Comparing {reference_json} and {root_folder}")
         if os.path.exists(root_folder):            
             print(f"Rebuilding index for {root_folder}...")
-            create_index(current_index_json,root_folder,None, ignore, args.verbose)
+            build_file_index(current_index_json,root_folder,None, ignore, args.verbose)
         else:
             print(f"WARNING - Index could not be rebuild, {root_folder} not found")
             print(f"          Using previous index which might be outdated")
