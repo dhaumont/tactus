@@ -116,7 +116,8 @@ def report_as_git(result : ComparisonResult, long):
     else:
         print("# No file with incorrect size")
     
-    print("Use status --long to get more details")
+    if not long:
+        print("Hint: you can use --long to get more details")
     
 def generate_copy_commands(result : ComparisonResult,command, input_folder, output_folder):
         
