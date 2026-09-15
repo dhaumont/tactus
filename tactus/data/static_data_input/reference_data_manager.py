@@ -5,6 +5,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from pathspec import PathSpec
 
 # ---- Helpers
 class ComparisonResult:
@@ -36,8 +37,8 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
         seen = set()
         
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
-            if ignored and root in ignored:
-               continue
+            if ignored and ignored.match_file(root):
+                continue
             if root in seen:
                 print(f"# Warning: circular dependency detected: {root} ")
                 continue
@@ -45,7 +46,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
             seen.add(root)
 
             for filename in filenames:
-                if ignored and filename in ignored:
+                if ignored and ignored.match_file(filename):
                     continue
                 file_path = os.path.join(root, filename)            
                 append_file_to_list(files, file_path, filename, input_folder, verbose)
@@ -55,9 +56,8 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 def get_files_from_flat_list(input_file, verbose):
     files = set()    
     lines = Path(input_file).read_text().splitlines()
-        
-    for filename in lines:
-        files.add(filename)        
+    
+    files = PathSpec.from_lines("gitwildmatch", lines)
         
     return files
    
