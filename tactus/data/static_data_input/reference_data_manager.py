@@ -94,7 +94,7 @@ def report_as_git(result : ComparisonResult, verbose, short):
         print(f"# No common files between {result.left} and {result.right}. ")
 
     if len(result.missing_files) > 0:
-        print(f"# Missing files in {result.right} ({len(result.missing_files)})")
+        print(f"# Missing files in {result.right}: {len(result.missing_files)}")
         if not short:
             for file in result.missing_files:
                 print(f"  D {file}")
@@ -102,7 +102,7 @@ def report_as_git(result : ComparisonResult, verbose, short):
         print(f"# No missing files in {result.right}")
 
     if len(result.unknown_files) > 0:
-        print(f"# Unknown files in {result.left} ({len(result.unknown_files)})")
+        print(f"# Unknown files in {result.left}: {len(result.unknown_files)}")
         if not short:
             for file in result.unknown_files:
                 print(f"  ? {file}")
@@ -110,7 +110,7 @@ def report_as_git(result : ComparisonResult, verbose, short):
         print(f"# No unknown files in {result.left}")
 
     if len(result.different_files) > 0:
-        print(f"# Files with incorrect size ({len(result.different_files)})")
+        print(f"# Files with incorrect size: {len(result.different_files)}")
         if not short:
             for file, actual_key, expected_key in result.different_files:
                 print(f"  M {file} (expected: {expected_key}, found: {actual_key})")
