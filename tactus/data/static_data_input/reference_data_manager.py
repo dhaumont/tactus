@@ -211,7 +211,7 @@ def create(json_file, root_folder, only_list, ignored_list, verbose):
     ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
 
     data = get_dict_from_dir(root_folder, only, ignored, verbose)
-    write_json(data, json_file, verbose)
+    write_json(data, json_file)
     print(f"JSON file '{json_file}' generated successfully.")
     
 def append_op(data,other_data,force_update):
