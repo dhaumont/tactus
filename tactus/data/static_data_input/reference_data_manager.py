@@ -37,6 +37,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
             relative_path = os.path.relpath(root, input_folder)
+            print(root, relative_path)
             if ignored_rule and ignored_rule.match_file(relative_path):
                 print(f"# skip {root} according ignore rule")
                 continue
@@ -56,12 +57,9 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
 def get_files_from_flat_list(input_files, verbose):
     
-    files = set()
-    print(input_files)
-    for input_file in input_files:
-        print(input_file)
+    files = set()    
+    for input_file in input_files:    
         lines = Path(input_file).read_text().splitlines()
-
         for filename in lines:
             files.add(filename)      
     
