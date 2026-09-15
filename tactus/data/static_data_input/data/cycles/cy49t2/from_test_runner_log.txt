@@ -81,7 +81,6 @@ climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0615_c.dir
 climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0615_c.hdr
 climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0915_c.dir
 climate/ECOCLIMAP-SG/LAI_SAT/LAI_SAT_0915_c.hdr
-climate/GMTED2010
 climate/PGD/ECOCLIMAP_II_EUROP_V2.6.dir
 climate/PGD/ECOCLIMAP_II_EUROP_V2.6.hdr
 climate/PGD/GlobalLakeDepth_V3.0.dir
