@@ -107,6 +107,14 @@ def report_as_git(result : ComparisonResult):
     else:
         print("# No file with incorrect size")
 
+def generate_copy_commands(result : ComparisonResult,command, input_folder, output_folder):
+        
+        for file in result.missing_files:
+            print(f"{command}{input_folder}/{file} {output_folder}/{file}")
+        
+        for file in result.different_files:
+            print(f"{command}{input_folder}/{file} {output_folder}/{file}")
+            
 # ---- Comparison functions
 def reverse_dict(data):
     reverse = {}
@@ -144,6 +152,23 @@ def diff(data, other_data,verbose):
 
     return result
 
+
+def create_index_dictionary(folder, only_list, ignored_list, verbose):
+    """compare_json_to_dir files listed in the JSON."""
+
+    only = get_files_from_flat_list(only_list, verbose) if only_list else None
+    ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
+    data = get_dict_from_dir(folder, only, ignored, verbose)
+
+    return data
+
+def create_index(output_json, folder, only_list, ignored_list, verbose):
+    """compare_json_to_dir files listed in the JSON."""
+
+    data = create_index_dictionary(folder, only_list, ignored_list, verbose)
+    write_json(data,output_json)
+
+
 def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
 
@@ -151,10 +176,8 @@ def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
         data = json.load(f)
 
     folder = dir if dir else data["folder"]
-    only = get_files_from_flat_list(only_list, verbose) if only_list else None
-    ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
-    other_data = get_dict_from_dir(folder, only, ignored, verbose)
-
+    other_data = create_index_dictionary(folder,only_list, ignored_list,verbose)
+    
     result = diff(data,other_data,verbose)
     result.left = json_file
     result.right = folder
@@ -242,42 +265,18 @@ def remove(json_file, other_json_file,result_json_file, force_update):
 
 def check_parse_arguments(args):
     errors = []
-    if not args.input:
-        errors.append("json missing")
-
-    if args.action in ['create','add','rm','diff']:
-        if len(args.input) < 2:
-            errors.append('Not enough parameters provided')
-            return errors
-
-    parameter_list = args.input.copy()
-    parameter_list.extend([args.only, args.ignore])
-    for path in parameter_list:
-        if path and not os.path.exists(path):
-            errors.append(f'\"{path}\" not found')
-
-    if args.action == 'create':
-        if not os.path.isdir(args.input[1]):
-            errors.append(f"{args.input[1]} is not a directory")
-
-    elif args.action in ['add','rm','diff']:
-        if os.path.isdir(args.input[1]):
-            errors.append(f"{args.input[1]} is a directory")
-
-    elif args.action == 'status':
-        if len(args.input) > 1:
-            directory = args.input[1]
-            if not os.path.isdir(directory):
-                errors.append(f"{directory} is not a directory")
+    
     return errors
+
 
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
 
-    parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')
-    parser.add_argument("input", help="Command parameter", nargs='+')
+    parser.add_argument("action", choices=['status','build_ref','copy','show'])
+    parser.add_argument("platform", choices=['atos','lumi','leonardo'])
 
+    parser.add_argument("--to", choices=['atos','lumi','leonardo'], default=None)
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--only", help="list of green files", default=None)
@@ -293,22 +292,40 @@ def main():
             print(f"  {error}")
         sys.exit(1)
 
-    if args.action == 'create':
-        create(args.input[0], args.input[1],args.only, args.ignore, args.verbose)
+    platform = args.platform
+    config_files = {}
+    with open("./data/config.json", "r") as f:
+        config_files = json.load(f)
+    root_folder = config_files[platform]["root_folder"]
+    reference_json = config_files[platform]["reference_json"]
+    ignore = config_files[platform]["ignore"]
+    current_index_json = config_files[platform]["current_index_json"]
+    
+    if args.to:
+        to_platform = args.to
+        to_root_folder = config_files[to_platform]["root_folder"]
+        to_current_index_json  = config_files[to_platform]["current_index_json"]
+        to_reference_json  = config_files[to_platform]["reference_json"]
+    if args.action == 'build_ref':
+        input_files = config_files[platform]["input"]        
+        create(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
-        directory = None if len(args.input) <= 1 else args.input[1]
-        result = compare_json_to_dir(args.input[0], directory, args.only, args.ignore, args.verbose)
+        if os.path.exists(root_folder):            
+            create_index(current_index_json,root_folder,None,ignore, args.verbose)
+        result = compare_json_to_json(current_index_json, reference_json, args.verbose)
         report_as_git(result)
     elif args.action == 'diff':
-        result = compare_json_to_json(args.input[0],args.input[1], args.verbose)
+        result = compare_json_to_json(reference_json,to_reference_json, args.verbose)
         report_as_git(result)
-    elif args.action in ['add','rm']:
-        if args.action == "add":
-            append(args.input[0],args.input[1], args.input[0], args.force_update)
+    elif args.action == 'copy':
+        result = compare_json_to_json(to_current_index_json, to_reference_json, args.verbose)
+        if args.scp_host:
+            command = f"scp {args.scp_host}:"
         else:
-            remove(args.input[0],args.input[1], args.input[0], args.force_update)
+            command = "cp "
+        generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
-        list_content(args.input)
+        list_content(reference_json)
 
 if __name__ == "__main__":
     main()

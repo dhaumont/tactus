@@ -1,0 +1,24 @@
+{
+    "atos": {
+        "root_folder": "/ec/project/accord/tactus",
+        "ignore": "./data/platform/atos/ignore",
+        "current_index_json": "./data/platform/atos/current_index.json",
+        "reference_json": "./data/platform/atos/reference.json",
+        "input": [
+            "./data/cycles/cy49t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/prerequisite.txt"
+        ]
+    },
+    "lumi": {
+        "root_folder": "/ec/project/accord/tactus",
+        "ignore": "./data/platform/lumi/ignore",
+        "current_index_json": "./data/platform/lumi/current_index.json",
+        "reference_json": "./data/platform/lumi/reference.json",
+        "input": [
+            "./data/cycles/cy49t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/prerequisite.txt"
+        ]
+    }
+}
