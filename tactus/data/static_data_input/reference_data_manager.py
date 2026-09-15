@@ -16,7 +16,7 @@ class ComparisonResult:
         self.missing_files = []
         self.unknown_files = []
         self.different_files = []
-        
+
 def append_file_to_list(files, file_path, filename, root_folder, verbose):
     if  os.path.exists(file_path):
         file_size = os.path.getsize(file_path)
@@ -26,49 +26,49 @@ def append_file_to_list(files, file_path, filename, root_folder, verbose):
             print(f"{relative_path}, {file_size}")
     else:
         print(f"Warning: skip {filename}: file not found in folder {root_folder}")
-        
+
 def get_dict_from_dir(input_folder, only, ignored, verbose):
     files = []
     if only:
-        for filename in only:            
-            file_path = os.path.join(input_folder, filename)    
+        for filename in only:
+            file_path = os.path.join(input_folder, filename)
             append_file_to_list(files, file_path, filename, input_folder, verbose)
     else:
         seen = set()
-        
+
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
             if ignored and ignored.match_file(root):
                 continue
             if root in seen:
                 print(f"# Warning: circular dependency detected: {root} ")
                 continue
-            
+
             seen.add(root)
 
             for filename in filenames:
                 if ignored and ignored.match_file(filename):
                     continue
-                file_path = os.path.join(root, filename)            
+                file_path = os.path.join(root, filename)
                 append_file_to_list(files, file_path, filename, input_folder, verbose)
-        
-    return {"folder": input_folder, "files": files}    
+
+    return {"folder": input_folder, "files": files}
 
 def get_files_from_flat_list(input_file, verbose):
-    files = set()    
+    files = set()
     lines = Path(input_file).read_text().splitlines()
-    
+
     files = PathSpec.from_lines("gitwildmatch", lines)
-        
+
     return files
-   
-   
+
+
 def write_json(data, output_json):
-    
+
     with open(output_json, "w") as json_file:
         json.dump(data, json_file, indent=4)
 
     print(f"JSON file '{output_json}' generated successfully.")
-    
+
 def get_verification_key(file_path):
     """Return the key used to check file consistency."""
     return os.path.getsize(file_path)
@@ -109,48 +109,48 @@ def reverse_dict(data):
     for item in data:
         relative_path = item["relative_path"]
         reverse[relative_path] = item
-    return reverse    
+    return reverse
 
-def compare(item, reverse, not_found_files,mistmatch_files = None, common_files = None):        
+def compare(item, reverse, not_found_files,mistmatch_files = None, common_files = None):
     relative_path = item["relative_path"]
-    
+
     if not relative_path in reverse:
         not_found_files.append(relative_path)
     elif mistmatch_files != None or common_files != None:
-        # Check if the file hash matches                    
+        # Check if the file hash matches
         actual_key = item["size"]
         other_key  = reverse[relative_path]["size"]
         if actual_key != other_key:
             mistmatch_files.append((relative_path, other_key, actual_key))
         elif common_files != None:
             common_files.append(relative_path)
-    
+
 def diff(data, other_data,verbose):
 
     result = ComparisonResult()
-    
+
     reverse = reverse_dict(data["files"])
     reverse_other = reverse_dict(other_data["files"])
     # Check if files in JSON are present on disk
     for item in data["files"]:
         compare(item,reverse_other, result.missing_files,result.different_files,result.common_files)
-        
+
     for other_item in other_data["files"]:
         compare(other_item,reverse,result.unknown_files)
-        
+
     return result
 
 def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
     """compare_json_to_dir files listed in the JSON."""
-        
+
     with open(json_file, "r") as f:
         data = json.load(f)
-    
-    folder = dir if dir else data["folder"]        
-    only = get_files_from_flat_list(only_list, verbose) if only_list else None        
+
+    folder = dir if dir else data["folder"]
+    only = get_files_from_flat_list(only_list, verbose) if only_list else None
     ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
-    other_data = get_dict_from_dir(folder, only, ignored, verbose)        
-    
+    other_data = get_dict_from_dir(folder, only, ignored, verbose)
+
     result = diff(data,other_data,verbose)
     result.left = json_file
     result.right = folder
@@ -159,7 +159,7 @@ def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
 def compare_json_to_json(json_file, other_json_file, verbose):
     with open(json_file, "r") as f:
         data = json.load(f)
-        
+
     with open(other_json_file, "r") as f:
         other_data = json.load(f)
 
@@ -169,16 +169,16 @@ def compare_json_to_json(json_file, other_json_file, verbose):
     return result
 
 def create(json_file, root_folder, only_list, ignored_list, verbose):
-    
+
     only = get_files_from_flat_list(only_list, verbose) if only_list else None
-    
+
     ignored = get_files_from_flat_list(ignored_list, verbose) if ignored_list else None
-            
-    data = get_dict_from_dir(root_folder, only, ignored, verbose)   
+
+    data = get_dict_from_dir(root_folder, only, ignored, verbose)
     write_json(data, json_file)
-    
+
 def append_op(data,other_data,force_update):
-   
+
    reverse = reverse_dict(data["files"])
    for other in other_data["files"]:
        relative_path = other["relative_path"]
@@ -186,16 +186,16 @@ def append_op(data,other_data,force_update):
        if not relative_path in reverse:
            data["files"].append(other)
            reverse[relative_path] = other
-   
-def remove_op(data,other_data,force_update):      
+
+def remove_op(data,other_data,force_update):
    new_files = []
    other_reverse = reverse_dict(other_data["files"])
    for item in data["files"]:
-       relative_path = item["relative_path"]   
+       relative_path = item["relative_path"]
        if relative_path not in other_reverse:
            new_files.append(item)
    data["files"] = new_files
-   
+
 def list_content(json_file,verbose):
    with open(json_file, "r") as f:
         data = json.load(f)
@@ -203,7 +203,7 @@ def list_content(json_file,verbose):
 
    for file in data["files"]:
         relative_path = file["relative_path"]
-        file_path = os.path.join(reference_folder, relative_path)        
+        file_path = os.path.join(reference_folder, relative_path)
         if verbose:
             size = file["size"]
             print(f"{file_path} {size}")
@@ -215,12 +215,12 @@ def boolean_op(operation, json_file, other_json_file,result_json_file,force_upda
 
    with open(json_file, "r") as f:
         data = json.load(f)
-   
+
    with open(other_json_file, "r") as f:
         other_data = json.load(f)
 
    operation(data, other_data, force_update)
-    
+
    write_json(data,result_json_file)
 
 
@@ -240,27 +240,27 @@ def check_parse_arguments(args):
     errors = []
     if not args.input:
         errors.append("json missing")
-    
+
     if args.action in ['create','add','rm','diff']:
         if len(args.input) < 2:
             errors.append('Not enough parameters provided')
             return errors
-            
+
     parameter_list = args.input.copy()
-    parameter_list.extend([args.only, args.ignore])    
+    parameter_list.extend([args.only, args.ignore])
     for path in parameter_list:
         if path and not os.path.exists(path):
             errors.append(f'\"{path}\" not found')
-                
+
     if args.action == 'create':
         if not os.path.isdir(args.input[1]):
             errors.append(f"{args.input[1]} is not a directory")
-            
+
     elif args.action in ['add','rm','diff']:
         if os.path.isdir(args.input[1]):
             errors.append(f"{args.input[1]} is a directory")
-            
-    elif args.action == 'status':        
+
+    elif args.action == 'status':
         if len(args.input) > 1:
             directory = args.input[1]
             if not os.path.isdir(directory):
@@ -270,14 +270,14 @@ def check_parse_arguments(args):
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
-    
-    parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')    
+
+    parser.add_argument("action", choices=['diff','show','add','rm','create', 'status'], default = 'list')
     parser.add_argument("input", help="Command parameter", nargs='+')
-    
+
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--only", help="list of green files", default=None)
-    
+
     parser.add_argument("--verbose", action="store_true", help="verbose mode")
 
     args = parser.parse_args()
@@ -288,21 +288,21 @@ def main():
         for error in errors:
             print(f"  {error}")
         sys.exit(1)
-    
-    if args.action == 'create':        
+
+    if args.action == 'create':
         create(args.input[0], args.input[1],args.only, args.ignore, args.verbose)
-    elif args.action == 'status':         
+    elif args.action == 'status':
         directory = None if len(args.input) <= 1 else args.input[1]
-        result = compare_json_to_dir(args.input[0], directory, args.only, args.ignore, args.verbose)            
+        result = compare_json_to_dir(args.input[0], directory, args.only, args.ignore, args.verbose)
         report_as_git(result)
-    elif args.action == 'diff':        
-        result = compare_json_to_json(args.input[0],args.input[1], args.verbose)        
+    elif args.action == 'diff':
+        result = compare_json_to_json(args.input[0],args.input[1], args.verbose)
         report_as_git(result)
-    elif args.action in ['add','rm']:        
+    elif args.action in ['add','rm']:
         if args.action == "add":
             append(args.input[0],args.input[1], args.input[0], args.force_update)
-        else:    
-            remove(args.input[0],args.input[1], args.input[0], args.force_update)    
+        else:
+            remove(args.input[0],args.input[1], args.input[0], args.force_update)
     elif args.action == 'show':
         list_content(args.input)
 
