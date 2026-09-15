@@ -308,11 +308,17 @@ def main():
         to_current_index_json  = config_files[to_platform]["current_index_json"]
         to_reference_json  = config_files[to_platform]["reference_json"]
     if args.action == 'build_ref':
+        if not os.path.exists(root_folder):            
+            print(f"Error - {root_folder} not found")
+            exit(1)
         input_files = config_files[platform]["input"]        
         create(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
         if os.path.exists(root_folder):            
             create_index(current_index_json,root_folder,None,ignore, args.verbose)
+        else:
+            print(f"WARNING - Index could not be rebuild, {root_folder} not found")
+            print(f"          Using previous index which might be outdated")
         result = compare_json_to_json(current_index_json, reference_json, args.verbose)
         report_as_git(result)
     elif args.action == 'diff':
