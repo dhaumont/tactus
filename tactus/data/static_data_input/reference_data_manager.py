@@ -319,13 +319,13 @@ def main():
         else:
             print(f"WARNING - Index could not be rebuild, {root_folder} not found")
             print(f"          Using previous index which might be outdated")
-        result = compare_json_to_json(current_index_json, reference_json, args.verbose)
+        result = compare_json_to_json(reference_json, current_index_json, args.verbose)
         report_as_git(result)
     elif args.action == 'diff':
         result = compare_json_to_json(reference_json,to_reference_json, args.verbose)
         report_as_git(result)
     elif args.action == 'copy':
-        result = compare_json_to_json(to_current_index_json, to_reference_json, args.verbose)
+        result = compare_json_to_json(to_reference_json,to_current_index_json, args.verbose)
         
         command = "cp "
         generate_copy_commands(result,command,root_folder,to_root_folder)
