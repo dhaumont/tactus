@@ -30,6 +30,9 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     ignored_rule = PathSpec.from_lines("gitwildmatch", ignored) if ignored else None
     if only:
         for filename in only:
+            if ignored_rule and ignored_rule.match_file(filename):
+                print(f"Error: {filename} is in the ignore list and can't be added")
+                continue
             file_path = os.path.join(input_folder, filename)
             append_file_to_list(files, file_path, filename, input_folder, verbose)
     else:
