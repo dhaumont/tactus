@@ -275,7 +275,7 @@ def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
 
-    parser.add_argument("action", choices=['status','build_ref','copy','show'])
+    parser.add_argument("action", choices=['status','build_ref','copy','show', 'diff'])
     parser.add_argument("platforms", choices=['atos','lumi','leonardo'], nargs="+")
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
