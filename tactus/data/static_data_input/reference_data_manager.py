@@ -71,13 +71,10 @@ def get_files_from_flat_list(input_files, verbose):
     return list(files)
 
 
-def write_json(data, output_json, verbose):
+def write_json(data, output_json):
 
     with open(output_json, "w") as json_file:
         json.dump(data, json_file, indent=4)
-
-    if verbose:
-        print(f"JSON file '{output_json}' generated successfully.")
 
 def get_verification_key(file_path):
     """Return the key used to check file consistency."""
@@ -215,7 +212,8 @@ def create(json_file, root_folder, only_list, ignored_list, verbose):
 
     data = get_dict_from_dir(root_folder, only, ignored, verbose)
     write_json(data, json_file, verbose)
-
+    print(f"JSON file '{json_file}' generated successfully.")
+    
 def append_op(data,other_data,force_update):
 
    reverse = reverse_dict(data["files"])
