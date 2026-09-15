@@ -29,6 +29,7 @@ def append_file_to_list(files, file_path, filename, root_folder, verbose):
 
 def get_dict_from_dir(input_folder, only, ignored, verbose):
     files = []
+    ignored_rule = PathSpec.from_lines("gitwildmatch", ignored) if ignored else None
     if only:
         for filename in only:
             file_path = os.path.join(input_folder, filename)
@@ -38,7 +39,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
             relative_path = os.path.relpath(root, input_folder)
-            if ignored and ignored.match_file(relative_path):
+            if ignored_rule and ignored_rule.match_file(relative_path):
                 print(f"# skip {root} according ignore rule")
                 continue
             if root in seen:
@@ -48,7 +49,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
             seen.add(root)
 
             for filename in filenames:
-                if ignored and ignored.match_file(filename):
+                if ignored_rule and ignored_rule.match_file(filename):
                     continue
                 file_path = os.path.join(root, filename)
                 append_file_to_list(files, file_path, filename, input_folder, verbose)
@@ -56,11 +57,12 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     return {"folder": input_folder, "files": files}
 
 def get_files_from_flat_list(input_file, verbose):
-    files = set()
+    files = []
     lines = Path(input_file).read_text().splitlines()
 
-    files = PathSpec.from_lines("gitwildmatch", lines)
-
+    for filename in lines:
+       files.append(filename)      
+    
     return files
 
 
