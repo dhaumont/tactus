@@ -11,7 +11,7 @@
         ]
     },
     "lumi": {
-        "root_folder": "/ec/project/accord/tactus",
+        "root_folder": "/scratch/project_465000527/de_330_common_data/DEODE",
         "ignore": ["./data/platform/lumi/ignore"],
         "current_index_json": "./data/platform/lumi/current_index.json",
         "reference_json": "./data/platform/lumi/reference.json",
