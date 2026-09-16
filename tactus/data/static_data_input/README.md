@@ -60,7 +60,6 @@ $ python reference_data_manager.py build_ref <platform_1> <platform_2>
     - `<platform_2>`: the target machine, to which only the missing files will be copied
 
 
-
 #### Example
 
 
@@ -91,7 +90,7 @@ $ python reference_data_manager.py build_ref <platform>
 - Argument:
     - `<platform>`: the machine for which the **reference list** will be generated
 
-d
+
 #### Example
 
 Generation of the *reference list* for atos:
@@ -234,4 +233,27 @@ Extract the list of files from the log of experiments in `"$SCRATCH/tactus"` and
 $ python reference_data_manager.py read_logs atos
 ```
 
-The name of the folder `"$SCRATCH/tactus"` and the name of the output file  `data/cycles/cy50t2/from_test_runner_log.txt` are defined in the config_file for the atos.
+The name of the folder `"$SCRATCH/tactus"` and the name of the output file  `data/cycles/cy50t2/from_test_runner_log.txt` are defined in the config_file for atos.
+
+
+## Todo
+
+### Implement cloud storage
+
+Add the management of a storage in the cloud: instead of copying files between two platforms, the reference files will be stored in a shared space in the cloud. This will be implemented by addiong as a new platform `cloud`, as well as new commands  to store and retrieve the files from the cloud location. 
+
+### Implement management of symbolic links
+
+Currently, symbolic links are treated as regular file. Qs a consequence, a link in the **reference list** will generate a duplicated file on disk and in the **index file**. We will store the links explicitely, like it's done in 'git', and re-create the list instead of duplicating files.
+
+### Proper implementation in Tactus
+
+- re-implement the commands provided by the reference_data_manager as standard Tactus commands
+- move the configuration files to the existing configuration file system.
+- unit test reference_data_manager
+- clean the code and fix the coding norms issues
+
+## io-tracker
+
+Use `io-tracker` to retrieve the list of required files from experiment logs, in addition to `files_list_from_log_folder.sh`
+
