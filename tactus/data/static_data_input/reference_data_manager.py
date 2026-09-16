@@ -331,9 +331,7 @@ def main():
     elif args.action == 'read_logs':        
         log_folder = config_files[platform]["log_folder"]
         output_file = config_files[platform]["output_file_from_log"]        
-        if not os.path.exists(log_folder):            
-             print(f"Error - {log_folder} not found")
-             exit(1)        
+        
         files_list_from_logs(log_folder, output_file, root_folder)
 if __name__ == "__main__":
     main()
