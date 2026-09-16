@@ -265,9 +265,11 @@ The command parse all the files present in the `log_folder` of the `<platform>`,
 
 ## Todo
 
-### Implement cloud storage
+### Implement s3 object storage on the EWC
 
-Add the management of a storage in the cloud: instead of copying files between two platforms, the reference files will be stored in a shared space in the cloud. This will be implemented by addiong as a new platform `cloud`, as well as new commands to store and retrieve the files from the cloud location. 
+Instead of copying files between two platforms, the reference files will be stored in a shared space in the S# object storage on the EWC. This will be implemented by addiong as a new platform `cloud`, as well as new commands to store and retrieve the files from the s3 object storage. 
+
+https://confluence.ecmwf.int/spaces/EWCLOUDKB/pages/326271772/Object+Storage+How+to+get+started
 
 ### Implement management of symbolic links
 
