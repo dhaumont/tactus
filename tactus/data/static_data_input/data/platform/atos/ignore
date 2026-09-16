@@ -4,8 +4,14 @@ climate/GLO-90
 climate/OSM_SFX8_1_EU
 climate_domains/PARIS_LARGE_*
 climate/ECOCLIMAP-SG-ML
+climate/OSM_SFX8_1
 aq_runs
 WFP_input_files
 tactus_references/v1.1.0/
 tactus_references/v1.3.0/
 satellite/rtcoef_rttov12
+rrtm/CY46t1
+rrtm/CY49t1
+rrtm/CY46h1
+rrtm/CY48t3
+rrtm/CY50t1

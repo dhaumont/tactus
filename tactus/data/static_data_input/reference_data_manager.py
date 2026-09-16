@@ -41,7 +41,7 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
 
         for root, dirs, filenames in os.walk(input_folder, followlinks=True):
             relative_path = os.path.relpath(root, input_folder)
-            
+
             if ignored_rule and ignored_rule.match_file(relative_path):
                 if verbose:
                     print(f"# skip {root} according ignore rule")
@@ -61,14 +61,14 @@ def get_dict_from_dir(input_folder, only, ignored, verbose):
     return {"folder": input_folder, "files": files}
 
 def get_files_from_flat_list(input_files, verbose):
-    
-    files = set()    
-    for input_file in input_files:    
+
+    files = set()
+    for input_file in input_files:
         lines = Path(input_file).read_text().splitlines()
         for filename in lines:
-            files.add(filename)      
-    
-    
+            files.add(filename)
+
+
     return list(files)
 
 
@@ -83,7 +83,7 @@ def get_verification_key(file_path):
 
 def report_as_git(result : ComparisonResult, long):
     # report_as_git results
-        
+
     if len(result.common_files) > 0:
         print(f"# Common files in {result.left} and {result.right}: {len(result.common_files)}")
         if long:
@@ -116,18 +116,18 @@ def report_as_git(result : ComparisonResult, long):
 
     else:
         print("# No file with incorrect size")
-    
+
     if not long:
         print("Hint: use --long to get more detail")
-    
+
 def generate_copy_commands(result : ComparisonResult,command, input_folder, output_folder):
-        
+
         for file in result.missing_files:
             print(f"{command}{input_folder}/{file} {output_folder}/{file}")
-        
+
         for file in result.different_files:
             print(f"{command}{input_folder}/{file} {output_folder}/{file}")
-            
+
 # ---- Comparison functions
 def reverse_dict(data):
     reverse = {}
@@ -190,7 +190,7 @@ def compare_json_to_dir(json_file, dir, only_list, ignored_list, verbose):
 
     folder = dir if dir else data["folder"]
     other_data = create_index_dictionary(folder,only_list, ignored_list,verbose)
-    
+
     result = diff(data,other_data,verbose)
     result.left = json_file
     result.right = folder
@@ -217,7 +217,7 @@ def build_reference(json_file, root_folder, only_list, ignored_list, verbose):
     data = get_dict_from_dir(root_folder, only, ignored, verbose)
     write_json(data, json_file)
     print(f"JSON file '{json_file}' generated successfully.")
-    
+
 def append(data,other_data,force_update):
 
    reverse = reverse_dict(data["files"])
@@ -243,7 +243,7 @@ def list_content(json_file,verbose):
    reference_folder = data["folder"]
 
    for file in data["files"]:
-        relative_path = file["relative_path"]        
+        relative_path = file["relative_path"]
         file_path = os.path.join(reference_folder, relative_path)
         if verbose:
             size = file["size"]
@@ -252,8 +252,8 @@ def list_content(json_file,verbose):
             print(f"{reference_folder}/{file_path}")
 
 def files_list_from_logs(log_folder, output_file, root_folder):
-    bash_file = "files_list_from_log_folder.sh"
-    subprocess.call([bash_file,log_folder,output_file,root_folder])
+    command = f"files_list_from_log_folder.sh {log_folder} {output_file} {root_folder}"
+    subprocess.run(command, shell=True,check=True)
 
 
 # ---- Main folder
@@ -262,7 +262,7 @@ def check_parse_arguments(args):
     errors = []
     if args.action == 'diff':
          if len(args.platforms) < 2:
-            errors.append(f"diff require two platforms")    
+            errors.append(f"diff require two platforms")
     return errors
 
 
@@ -272,7 +272,7 @@ def main():
 
     parser.add_argument("action", choices=['status','build_ref','copy','show', 'diff', 'read_logs'])
     parser.add_argument("platforms", choices=['atos','lumi','leonardo'], nargs="+")
-    
+
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
     parser.add_argument("--only", help="list of green files", default=None)
@@ -296,21 +296,21 @@ def main():
     reference_json = config_files[platform]["reference_json"]
     ignore = config_files[platform]["ignore"]
     current_index_json = config_files[platform]["current_index_json"]
-    
+
     if len(args.platforms) > 1:
         to_platform = args.platforms[1]
         to_root_folder = config_files[to_platform]["root_folder"]
         to_current_index_json  = config_files[to_platform]["current_index_json"]
         to_reference_json  = config_files[to_platform]["reference_json"]
     if args.action == 'build_ref':
-        if not os.path.exists(root_folder):            
+        if not os.path.exists(root_folder):
             print(f"Error - {root_folder} not found")
             exit(1)
-        input_files = config_files[platform]["input"]        
+        input_files = config_files[platform]["input"]
         build_reference(reference_json, root_folder, input_files, ignore, args.verbose)
     elif args.action == 'status':
         print(f"Comparing {reference_json} and {root_folder}")
-        if os.path.exists(root_folder):            
+        if os.path.exists(root_folder):
             print(f"Rebuilding index for {root_folder}...")
             build_file_index(current_index_json,root_folder,None, ignore, args.verbose)
         else:
@@ -323,15 +323,15 @@ def main():
         result = compare_json_to_json(reference_json,to_reference_json, args.verbose)
         report_as_git(result, args.long)
     elif args.action == 'copy':
-        result = compare_json_to_json(to_reference_json,to_current_index_json, args.verbose)        
+        result = compare_json_to_json(to_reference_json,to_current_index_json, args.verbose)
         command = "cp "
         generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
         list_content(reference_json,args.verbose, args.long)
-    elif args.action == 'read_logs':        
+    elif args.action == 'read_logs':
         log_folder = config_files[platform]["log_folder"]
-        output_file = config_files[platform]["output_file_from_log"]        
-        
+        output_file = config_files[platform]["output_file_from_log"]
+
         files_list_from_logs(log_folder, output_file, root_folder)
 if __name__ == "__main__":
     main()
