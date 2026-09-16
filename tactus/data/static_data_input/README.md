@@ -2,14 +2,15 @@
 
 ## Introduction
 
-The **reference_data_manager** tool manage the static data files on different `<platform>`.
+The **reference_data_manager** tool manage the static data files on different `<platforms>`.
 
 The general principle is to maintain and exploit two json files for each `<platform>` :
 - **reference list**: a reference list of expected files
 - **file index**: a file index containing the list of the actual files on disk
 
 
-The **reference_data_manager** tool provides the following commands to manipulate these different files:
+The **reference_data_manager** tool provides the following commands to manage the static data of the different `<platforms>`:
+
 - `copy <platform_1> <platform_2>`: copy from <platform_1> the list of files actually missing on <platform_2>
 - `build_ref <platform>`: build the **reference list** for `<platform>`, based on a pre-defined list of files
 - `status <platform>`: build **file index** and compare it to **reference** list, for `<platform>`.
@@ -17,7 +18,8 @@ The **reference_data_manager** tool provides the following commands to manipulat
 - `diff <platform_1> <platform_2>`: compare the **reference list** of <platform_1> and <platform_2>
 - `read_logs <platform>`: extract a flat list of files from the log files of a set of Tactus experiments
 
-The detail of the different commands is provided  in the next sections.
+The implementation of these commands is relying different operations performed on these **reference_list** and **file index** files.
+More detail is provided for the different commands in the next sections. 
 
 ### Configuration 
 
