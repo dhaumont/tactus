@@ -10,9 +10,9 @@ The general principle is to maintain and exploit two json files for each `<platf
 
 
 The **reference_data_manager** tool provides the following commands to manipulate these different files:
-- `status <platform>`: build **file index** and compare it to **reference** list, for `<platform>`. I
-- `build_ref <platform>`: build the **reference list** for `<platform>`, based on a pre-defined list of files
 - `copy <platform_1> <platform_2>`: copy from <platform_1> the list of files actually missing on <platform_2>
+- `build_ref <platform>`: build the **reference list** for `<platform>`, based on a pre-defined list of files
+- `status <platform>`: build **file index** and compare it to **reference** list, for `<platform>`.
 - `show <platform>`: list the content of the **reference list** for `<platform>`
 - `diff <platform_1> <platform_2>`: compare the **reference list** of <platform_1> and <platform_2>
 - `read_logs <platform>`: extract a flat list of files from the log files of a set of Tactus experiments
@@ -22,7 +22,7 @@ The detail of the different commands is provided  in the next sections.
 ### Configuration 
 
 The location of the different files and all the required information for a `<platform>` is stored in the An additional `data/config.json` config files, containing:
-- `current_index_json`: name of the **file index** file in json format (default: 'data/platform/`<platform>`/current_index.json)
+- `current_index_json`: name of the **file index** file in json format (default: `data/platform/`<platform>`/current_index.json)
 - `reference_json`:  name of file the **reference list** in json format (default: data/platform/`<platform>`/reference.json)
 - `root_folder`: folder containing reference files  (on atos:`/ec/project/accord/tactus`)
 - `log_folder` : folder containing the log of experiments (on atos: `$SCRATCH/tactus`)
@@ -39,10 +39,83 @@ Similar to the `.gitignore` file used in `git`, a list of files and folders to s
 
 ## Usage
 
-## 1. comparison of the **file index** with the **reference list**
 
-The comparison of **file index** with the **reference list** of a given `<platform>` is performed via the `status` command:
+### 1. `copy` to transfer missing files between `<platforms>`
 
+#### Description 
+
+The `copy` command will copy from `<platform_1>` the list files actually missing on `<platform_2>`.
+
+From a technical point of view, the list of missing files on `<platform_2>` is computed by comparing the `reference.json` and `current_index.json` of `<platform_2>`. The list of files are then retrieved using the `root_folder` of `<platform_1>`.
+
+Tne command have to be launched from `<platform_1>`.
+
+#### Syntax 
+
+```
+$ python reference_data_manager.py build_ref <platform_1> <platform_2> 
+```
+- Argument:
+    - `<platform_1>`: the source machine, from which the files will be copied
+    - `<platform_2>`: the target machine, to which only the missing files will be copied
+
+
+
+#### Examples
+
+
+Copy from atos to lumi the list of files actually missing on lumi:
+
+```
+$ python reference_data_manager.py build_ref atos lumi 
+```
+
+The command is launched from atos, the source machine.
+
+### 2. build_ref to generate **reference list** of `<platform>`
+
+
+#### Description 
+
+The `build_ref` command will generate the **reference list** from predifined lists of files. 
+The predefined lists of file are listed in the configuration file in the `input`.
+
+For instance, a list of files generated from the log files of experiments will be used as `input`.
+The command can be run from any platform, to build the **reference list** of any other platform.
+
+#### Syntax 
+
+```
+$ python reference_data_manager.py build_ref <platform> 
+```
+- Argument:
+    - `<platform>`: the machine for which the **reference list** will be generated
+
+
+
+
+#### Examples
+
+Generation of the *reference list* for atos:
+
+```
+$ python reference_data_manager.py build_ref atos
+```
+
+### 3. `status` to display the status of a `<platform>`
+
+
+#### Description 
+
+The `status` command will display a list of files already present or still missing on a given  `<platform>`, in a similar way as the `git status` command.
+
+More specifically, the command:
+- re-builds the **file index**  of the `<platform>`  and store it as `current_file_index.json`
+- performs a two-side comparison between `current_file_index.json` and `reference_list`, the **reference list** of the platform .
+
+The command can be launched from any `<launch platform>` to get the status of any other `<platform>`.  However, the index is only rebuilt when the command is `<launch platform` is equal to the `<platform>`. Otherwise, the **file index** can't be reuilt: the rebuilt step is skipped and the existing `current_file_index.json` is used for comparison.
+
+#### Syntax 
 
 ```
 $ python reference_data_manager.py status <platform> --long --verbose
@@ -53,18 +126,9 @@ $ python reference_data_manager.py status <platform> --long --verbose
     - `--verbose` (optional): provide more debugging information.
 
 
-#### Description 
-
-The `status` command will:
-- build the index file 'current_file_index.json' of the `<platform>`
-- compare the index to the reference file, `reference.json` ot the `<platform>`.
-
-It can be launched from any `<platform>`.  However, the index is only rebuilt when the command is launched from the `<platform>` itself. Otherwise, the rebuilt step is skipped and the existing 'current_file_index.json' will be used.
-
-
 #### Examples
 
-- status of ATOS from this machine: rebuild index file and give status
+- status of ATOS from this machine: rebuild **file index** and give status
 
 
 ```
@@ -78,7 +142,8 @@ Rebuilding index for /ec/project/accord/tactus...
 Hint: use --long to get more detail
 ```
 
-- status of ATOS from laptop: give status using old index file
+- status of ATOS from laptop: give status using old **file index**
+
 ```
  $ python reference_data_manager.py status atos
 Comparing ./data/platform/atos/reference.json and /ec/project/accord/tactus
@@ -92,24 +157,83 @@ Hint: use --long to get more detail
 ```
 
 
+### 4. `show` to list content of **reference list** of a `<platform>`
 
-2. build **reference list**:
-`build_ref` command: 
-
-3. copy missing files from a `<platform>` to another one
-
-`copy <platform_1> <platform_2>`: copy from <platform_1> the list of files actually missing on <platform_2>
-
-4. List content of **reference list**:
-
-`show <platform>`: list the content of the **reference list** for `<platform>`
+#### Description 
 
 
-5. Difference between the **reference list** of two platforms:
+The `show` command will display the list of files from the **reference list** of `<platform>`
+This command can be used from any platform.
 
-`diff <platform_1> <platform_2>`: compare the **reference list** of <platform_1> and <platform_2>
+#### Syntax 
+
+```
+$ python reference_data_manager.py show <platform>
+```
+- Argument:
+    - `<platform>`: the machine for which the list of files of **reference list** will be displayed
+
+#### Examples
+
+List  the *reference list* for atos:
+
+```
+$ python reference_data_manager.py show atos
+```
 
 
-6. Extract list of required files from experiment logs
+###  5. `diff` to list the differences between the **reference lists** of two `<platforms>`
 
-`read_logs <platform>`: extract a flat list of files from the log files of a set of Tactus experiments
+#### Description 
+
+The `diff` command will  compare the **reference list** of the two input <platform_1> and <platform_2>, in a similar way as the `diff` command.
+
+From a technical point of view, the command will compare the `reference_list.json` files of the two platforms and display a formatted results.
+
+#### Syntax 
+
+```
+$ python reference_data_manager.py diff <platform_1> <platform_2>
+```
+
+#### Example
+
+Compare the **reference lists** of atos and lumi:
+
+```
+$ python reference_data_manager.py diff atos lumi
+```
+
+
+### 6. r`ead_logs` to extract list of required files from experiment logs
+
+
+#### Description 
+
+The `read_logs` command will extract a flat list of files from the log files of a set of Tactus experiments.
+
+From a technical point of view, the commands parse all the files present in the `log_folder` of the `<platform>`, and store the results in its `output_file_from_log` file.
+
+The name of the `log_folder` and the name of the output file is provided in the config file, under the
+keys `log_folder` and the `output_file_from_log` of the `<platform>`.
+
+The parsing is performed by the bash script `files_list_from_log_folder.sh`, using a combination of `find`, `sed` and `grep` commands for maximum efficiency.
+The results is written as a flat list of files in the result file.
+
+#### Syntax 
+
+```
+$ python reference_data_manager.py read_logs <platform>
+```
+
+The command has to be executed from `<platform>`.
+
+#### Examples
+
+Extract the list of files from the log of experiments in `"$SCRATCH/tactus"` and store the results in the file `data/cycles/cy50t2/from_test_runner_log.txt`
+
+```
+$ python reference_data_manager.py read_logs atos
+```
+
+The name of the folder `"$SCRATCH/tactus"` and the name of the output file  `data/cycles/cy50t2/from_test_runner_log.txt` are defined in the config_file for the atos.
