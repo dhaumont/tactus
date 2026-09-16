@@ -21,7 +21,7 @@ The detail of the different commands is provided  in the next sections.
 
 ### Configuration 
 
-The location of the different files and all the required information for a `<platform>` is stored in the config files  `data/config.json`, containing for each <platform>:
+The location of the different files and all the required information for a `<platform>` is stored in the config files  `data/config.json`, containing for each `<platform>`:
 - `current_index_json`: name of the **file index** file in json format (default: `data/platform/`<platform>`/current_index.json)
 - `reference_json`:  name of file the **reference list** in json format (default: data/platform/`<platform>`/reference.json)
 - `root_folder`: folder containing reference files  (on atos:`/ec/project/accord/tactus`)
