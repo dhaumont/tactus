@@ -1,9 +1,11 @@
 {
     "atos": {
         "root_folder": "/ec/project/accord/tactus",
+        "log_folder" : "$SCRATCH/tactus",
         "ignore": ["./data/platform/atos/ignore"],
         "current_index_json": "./data/platform/atos/current_index.json",
         "reference_json": "./data/platform/atos/reference.json",
+        "output_file_from_log": "./data/cycles/cy50t2/from_test_runner_log.txt",
         "input": [
             "./data/cycles/cy49t2/from_test_runner_log.txt",
             "./data/cycles/cy50t2/from_test_runner_log.txt",

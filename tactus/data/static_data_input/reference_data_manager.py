@@ -6,6 +6,7 @@ import os
 import sys
 from pathlib import Path
 from pathspec import PathSpec
+import subprocess
 
 # ---- Helpers
 class ComparisonResult:
@@ -250,13 +251,18 @@ def list_content(json_file,verbose):
         else:
             print(f"{reference_folder}/{file_path}")
 
+def files_list_from_logs(log_folder, output_file, root_folder):
+    bash_file = "files_list_from_log_folder.sh"
+    subprocess.call([bash_file,log_folder,output_file,root_folder])
+
+
 # ---- Main folder
 
 def check_parse_arguments(args):
     errors = []
     if args.action == 'diff':
          if len(args.platforms) < 2:
-            errors.append(f"diff require two platforms")
+            errors.append(f"diff require two platforms")    
     return errors
 
 
@@ -264,7 +270,7 @@ def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(description="File validation script.")
 
-    parser.add_argument("action", choices=['status','build_ref','copy','show', 'diff'])
+    parser.add_argument("action", choices=['status','build_ref','copy','show', 'diff', 'read_logs'])
     parser.add_argument("platforms", choices=['atos','lumi','leonardo'], nargs="+")
     
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
@@ -322,6 +328,12 @@ def main():
         generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
         list_content(reference_json,args.verbose, args.long)
-
+    elif args.action == 'read_logs':        
+        log_folder = config_files[platform]["log_folder"]
+        output_file = config_files[platform]["output_file_from_log"]        
+        if not os.path.exists(log_folder):            
+             print(f"Error - {log_folder} not found")
+             exit(1)        
+        files_list_from_logs(log_folder, output_file, root_folder)
 if __name__ == "__main__":
     main()
