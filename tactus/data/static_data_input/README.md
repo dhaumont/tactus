@@ -1,4 +1,4 @@
-# The reference_data_manager
+# The reference data manager tool
 
 ## Introduction
 
