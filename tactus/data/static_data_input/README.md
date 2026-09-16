@@ -37,7 +37,7 @@ Some commands required to walk all the files in the reference folder. This opera
 Similar to the `.gitignore` file used in `git`, a list of files and folders to skip during the indexing process is provided in the `platform/<platform>/ignore` file.
 
 
-## Usage
+## Description of the commands
 
 
 ### 1. `copy` to transfer missing files between `<platforms>`
@@ -61,7 +61,7 @@ $ python reference_data_manager.py build_ref <platform_1> <platform_2>
 
 
 
-#### Examples
+#### Example
 
 
 Copy from atos to lumi the list of files actually missing on lumi:
@@ -91,10 +91,8 @@ $ python reference_data_manager.py build_ref <platform>
 - Argument:
     - `<platform>`: the machine for which the **reference list** will be generated
 
-
-
-
-#### Examples
+d
+#### Example
 
 Generation of the *reference list* for atos:
 
@@ -173,7 +171,7 @@ $ python reference_data_manager.py show <platform>
 - Argument:
     - `<platform>`: the machine for which the list of files of **reference list** will be displayed
 
-#### Examples
+#### Example
 
 List  the *reference list* for atos:
 
@@ -205,7 +203,7 @@ $ python reference_data_manager.py diff atos lumi
 ```
 
 
-### 6. r`ead_logs` to extract list of required files from experiment logs
+### 6. `read_logs` to extract list of required files from experiment logs
 
 
 #### Description 
@@ -228,7 +226,7 @@ $ python reference_data_manager.py read_logs <platform>
 
 The command has to be executed from `<platform>`.
 
-#### Examples
+#### Example
 
 Extract the list of files from the log of experiments in `"$SCRATCH/tactus"` and store the results in the file `data/cycles/cy50t2/from_test_runner_log.txt`
 
