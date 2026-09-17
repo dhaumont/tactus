@@ -123,10 +123,10 @@ def report_as_git(result : ComparisonResult, long):
 def generate_copy_commands(result : ComparisonResult,command, input_folder, output_folder):
 
         for file in result.missing_files:
-            print(f"{command}{input_folder}/{file} {output_folder}/{file}")
+            print(f"mkdir -p `dirname {output_folder}/{file}` && cp {input_folder}/{file} {output_folder}/{file}")
 
         for file in result.different_files:
-            print(f"{command}{input_folder}/{file} {output_folder}/{file}")
+            print(f"mkdir -p `dirname {output_folder}/{file}` && cp {input_folder}/{file} {output_folder}/{file}")
 
 # ---- Comparison functions
 def reverse_dict(data):
