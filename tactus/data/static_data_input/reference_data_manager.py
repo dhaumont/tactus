@@ -327,7 +327,7 @@ def main():
         command = "cp "
         generate_copy_commands(result,command,root_folder,to_root_folder)
     elif args.action == 'show':
-        list_content(reference_json,args.verbose, args.long)
+        list_content(reference_json,args.verbose)
     elif args.action == 'read_logs':
         log_folder = config_files[platform]["log_folder"]
         output_file = config_files[platform]["output_file_from_log"]
