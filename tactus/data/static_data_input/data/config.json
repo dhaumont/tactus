@@ -22,5 +22,16 @@
             "./data/cycles/cy50t2/from_test_runner_log.txt",
             "./data/cycles/cy50t2/prerequisite.txt"
         ]
+    },
+     "cloud": {
+        "root_folder": "/lus/h2resw01/scratch/cvap/test_tactus_data/data",
+        "ignore": ["./data/platform/cloud/ignore"],
+        "current_index_json": "./data/platform/cloud/current_index.json",
+        "reference_json": "./data/platform/cloud/reference.json",
+        "input": [
+            "./data/cycles/cy49t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/from_test_runner_log.txt",
+            "./data/cycles/cy50t2/prerequisite.txt"
+        ]
     }
 }

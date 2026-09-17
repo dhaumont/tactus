@@ -271,7 +271,7 @@ def main():
     parser = argparse.ArgumentParser(description="File validation script.")
 
     parser.add_argument("action", choices=['status','build_ref','copy','show', 'diff', 'read_logs'])
-    parser.add_argument("platforms", choices=['atos','lumi','leonardo'], nargs="+")
+    parser.add_argument("platforms", choices=['atos','lumi','leonardo','cloud'], nargs="+")
 
     parser.add_argument("--force_update", action="store_true", help="verbose mode")
     parser.add_argument("--ignore", help="list of ignore files", default=None)
