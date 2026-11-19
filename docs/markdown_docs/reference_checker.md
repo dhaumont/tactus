@@ -33,7 +33,7 @@ The following comparison tools are available:
 - NormsChecker (from DAVAI), to compare norms results in NODE files
 - xtool (from gl) to compare fields store in GRIB and FA format
 
-The available formats for the summary files are `json`, `txt` or `davai`.
+The available formats for the summary files are `json`, `txt` or `ciboulai`.
 
 ## Reference checker configuration
 
@@ -142,12 +142,13 @@ referenced by their name as defined in `[reference_checker.summary.{SummaryName}
 
 By default, the [`reference check`] will raise an exception in the task mentionned in the 'analyze_summary' list, in case of check failure. This can be deactivated by setting `suppress_exception = true`.
 
-### DaVaI summary stack output
+### Ciboulai summary stack output
 
-The `davai` format produces files compatible with the DaVaI (mtool)
-`summaries_stack` directory layout. Contrary to the `json` and `txt` formats,
-it does not write a single aggregate file: the `file` field defines a
-*directory*, and each checked task writes one pair of files there:
+The `ciboulai` format produces files in the `summaries_stack` directory
+layout of the Ciboulai server (as written by the davai mtool client).
+Contrary to the `json` and `txt` formats, it does not write a single
+aggregate file: the `file` field defines a *directory*, and each checked
+task writes one pair of files there:
 
 - `<task>.<suffix>.itself.json`: run status of the task (`Context`, `Status`,
   `Updated`, and a `Listing` section pointing at the `.diff` result files).
@@ -160,11 +161,11 @@ it does not write a single aggregate file: the `file` field defines a
 
 ```toml
 [reference_checker]
-  summary_active = ["MainSummary", "DavaiSummary"]
+  summary_active = ["MainSummary", "CiboulaiSummary"]
 
-[reference_checker.summary.DavaiSummary]
+[reference_checker.summary.CiboulaiSummary]
   file = "@CASEDIR@/checks/summaries_stack"
-  format = "davai"
+  format = "ciboulai"
 ```
 
 The files are (re)written by the task performing the checks, each time results
@@ -172,11 +173,11 @@ are appended to the other summaries. The analysis performed in the
 `analyze_summary` task is based on the consistency files: `OK` counts as a
 success, `IC` as an error and `0` as a missing file.
 
-### Publishing the DaVaI summaries to a Ciboulai server
+### Publishing the summaries to the Ciboulai server
 
-As soon as a summary with format `davai` is listed in `summary_active`, the
-files of the stack are also published to a
-[Ciboulai](https://www.umr-cnrm.fr/davai) (DAVAI) server, so that the
+As soon as a summary with format `ciboulai` is listed in `summary_active`, the
+files of the stack are also published to the
+[Ciboulai](https://www.umr-cnrm.fr/davai) server, so that the
 experiment can be followed on its dashboards. The connection is configured in
 the `[reference_checker.ciboulai]` section:
 
@@ -193,11 +194,11 @@ the `[reference_checker.ciboulai]` section:
   timeout = 60
 ```
 
-- `enabled`: master switch. Set it to `false` to keep writing the DaVaI files
+- `enabled`: master switch. Set it to `false` to keep writing the summary files
   on disk without any exchange with the server.
 - `server`: url of the Ciboulai server, its `api/` endpoint is used.
 - `token_file`: file whose first line holds the access token. The environment
-  variable `CIBOULAI_TOKEN` takes precedence over the file. Ask your Davai
+  variable `CIBOULAI_TOKEN` takes precedence over the file. Ask your Ciboulai
   administrator for a token.
 - `experiment_name`: pattern to build the experiment name, from the fields
   `{counter}` (zero-padded to 4 digits), `{machine}` (the platform host) and
@@ -213,7 +214,7 @@ the `[reference_checker.ciboulai]` section:
 - `tries`, `sleep`, `timeout`: number of tries, delay between tries and
   timeout in seconds of one send.
 
-The publication follows the DaVaI client protocol: the experiment is created
+The publication follows the Davai client protocol: the experiment is created
 or reset (i.e. cleared of its previous task instances) by the task listed in
 `create_summary`, when the stack directory is created, and then every task
 publishes the files it writes, `itself` before `consistency`.

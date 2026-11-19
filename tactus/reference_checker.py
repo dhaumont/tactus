@@ -580,7 +580,7 @@ class CheckSummary:
         """Creation of a CheckSummary.
 
         Args:
-           fileformat: the format of the summary file (e.g. "txt", "json", "davai")
+           fileformat: the format of the summary file (e.g. "txt", "json", "ciboulai")
            filename: the pattern defining the name of the summary file
         """
         self.fileformat = fileformat
@@ -606,9 +606,9 @@ class CheckSummary:
                 summary_list.append(CheckSummaryJson(file_format, file_name))
             elif file_format == "txt":
                 summary_list.append(CheckSummaryTxt(file_format, file_name))
-            elif file_format == "davai":
+            elif file_format == "ciboulai":
                 summary_list.append(
-                    CheckSummaryDavai(file_format, file_name, config.get("ciboulai"))
+                    CheckSummaryCiboulai(file_format, file_name, config.get("ciboulai"))
                 )
             else:
                 logger.warning(
@@ -782,7 +782,7 @@ class CheckSummaryTxt(CheckSummary):
         """Creation of a CheckSummaryTxt object.
 
         Args:
-           fileformat: the format of the summary file (e.g. "txt", "json", "davai")
+           fileformat: the format of the summary file (e.g. "txt", "json", "ciboulai")
            filename: the pattern defining the name of the summary file
         """
         CheckSummary.__init__(self, fileformat, filename)
@@ -918,7 +918,7 @@ class CheckSummaryJson(CheckSummary):
         """Creation of a CheckSummaryJson.
 
         Args:
-           fileformat: the format of the summary file (e.g. "txt", "json", "davai")
+           fileformat: the format of the summary file (e.g. "txt", "json", "ciboulai")
            filename: the pattern defining the name of the summary file
         """
         CheckSummary.__init__(self, fileformat, filename)
@@ -1102,7 +1102,7 @@ class CheckSummaryJson(CheckSummary):
         ].append(content)
 
 
-#: Default Ciboulai (DAVAI) server
+#: Default Ciboulai server
 CIBOULAI_DEFAULT_SERVER = "https://www.umr-cnrm.fr/davai/"
 #: Default pattern to build the experiment name from
 CIBOULAI_NAME_PATTERN = "ttr-{counter}-{machine}@{user}"
@@ -1111,7 +1111,7 @@ CIBOULAI_TOKEN_ENVIRONMENT = "CIBOULAI_TOKEN"  # noqa: S105
 
 
 class PublishToCiboulai:
-    """Class to publish DaVaI summary files to a Ciboulai server.
+    """Class to publish summary stack files to a Ciboulai server.
 
     Port of the standalone prototype push_to_davai.py to tactus, mirroring
     the Davai client chain (davai.vtx.hooks.summaries.send_to_DAVAI_server,
@@ -1146,7 +1146,7 @@ class PublishToCiboulai:
         Args:
            ciboulai_config: the [reference_checker.ciboulai] configuration
            platform: Platform, used for path substitution and machine name
-           stack_dir: the DaVaI summary stack directory to publish
+           stack_dir: the summary stack directory to publish
         """
         self.enabled = bool(ciboulai_config.get("enabled", True))
         server = str(
@@ -1405,7 +1405,7 @@ class PublishToCiboulai:
         return True
 
     def publish(self, task, scope, summary):
-        """Send one DaVaI summary dictionary to the server.
+        """Send one summary dictionary to the server.
 
         Args:
             task: the task name, first level key of the payload
@@ -1428,8 +1428,8 @@ class PublishToCiboulai:
         return ok
 
 
-class CheckSummaryDavai(CheckSummary):
-    """Class to generate summary files in the DaVaI summary stack format.
+class CheckSummaryCiboulai(CheckSummary):
+    """Class to generate summary files in the Ciboulai summary stack format.
 
     Instead of one aggregate file, this writer produces one pair of files per
     checked task, in a shared stack directory:
@@ -1439,7 +1439,8 @@ class CheckSummaryDavai(CheckSummary):
     - <task_stem>.consistency.json : reference-check verdict of the task
       (comparisonStatus with symbols OK / IC / 0)
 
-    The format matches the DaVaI (mtool) summaries_stack files: status triples
+    The layout matches the summaries_stack files of the server (davai mtool):
+    status triples
     (symbol, short, text), local ISO timestamps without timezone, and
     human-readable keys kept verbatim. Files are rewritten atomically by the
     task that owns them each time results are appended.
@@ -1472,10 +1473,10 @@ class CheckSummaryDavai(CheckSummary):
     }
 
     def __init__(self, fileformat, filename, ciboulai_config=None):
-        """Creation of a CheckSummaryDavai.
+        """Creation of a CheckSummaryCiboulai.
 
         Args:
-           fileformat: the format of the summary file (e.g. "txt", "json", "davai")
+           fileformat: the format of the summary file (e.g. "txt", "json", "ciboulai")
            filename: the pattern defining the summary stack directory
            ciboulai_config: the [reference_checker.ciboulai] configuration,
                when present and enabled the files are also published to the
@@ -1517,7 +1518,7 @@ class CheckSummaryDavai(CheckSummary):
             shutil.rmtree(self.fullpath)
 
     def append(self, check_definitions: list[CheckDefinition]):
-        """Write one pair of DaVaI files per task contained in the definitions.
+        """Write one pair of summary files per task contained in the definitions.
 
         Args:
             check_definitions: the input list of check definitions
@@ -1542,11 +1543,11 @@ class CheckSummaryDavai(CheckSummary):
                 self.publisher.publish(stem, "consistency", consistency)
 
         logger.info(
-            f"Appended DaVaI results to reference checking summary: {self.fullpath}"
+            f"Appended Ciboulai results to reference checking summary: {self.fullpath}"
         )
 
     def compute_and_append_analysis(self, check):
-        """Analyze the DaVaI consistency files of the stack directory.
+        """Analyze the consistency files of the stack directory.
 
         Args:
             check: boolean indicating if the check was performed
@@ -1556,7 +1557,7 @@ class CheckSummaryDavai(CheckSummary):
         """
         analysis = CheckSummaryAnalysis(check)
         if not os.path.isdir(self.fullpath):
-            analysis.append_error_message(f"No DaVaI summary found in {self.fullpath}")
+            analysis.append_error_message(f"No Ciboulai summary found in {self.fullpath}")
             return analysis
 
         for filename in sorted(os.listdir(self.fullpath)):
@@ -1578,7 +1579,7 @@ class CheckSummaryDavai(CheckSummary):
         return analysis
 
     def contains_summary_analysis(self):
-        """Return False: DaVaI files never contain an aggregate analysis."""
+        """Return False: Ciboulai files never contain an aggregate analysis."""
         return False
 
     def _ensure_dir(self):
@@ -1658,15 +1659,15 @@ class CheckSummaryDavai(CheckSummary):
         ]
 
         if len(results) == 0:
-            status = dict(CheckSummaryDavai.STATUS_NO_REF)
+            status = dict(CheckSummaryCiboulai.STATUS_NO_REF)
             if warnings:
                 status["text"] = "; ".join(warnings)
         elif all(result == "N/A" for result in results):
-            status = dict(CheckSummaryDavai.STATUS_NO_REF)
+            status = dict(CheckSummaryCiboulai.STATUS_NO_REF)
         elif all("SUCCESS" in result for result in results):
-            status = dict(CheckSummaryDavai.STATUS_OK)
+            status = dict(CheckSummaryCiboulai.STATUS_OK)
         else:
-            status = dict(CheckSummaryDavai.STATUS_INCONSISTENT)
+            status = dict(CheckSummaryCiboulai.STATUS_INCONSISTENT)
 
         if warnings and status["symbol"] != "0":
             status["text"] = f"{status['text']} ({'; '.join(warnings)})"

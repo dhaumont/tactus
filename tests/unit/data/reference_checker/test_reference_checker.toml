@@ -48,9 +48,9 @@
   file = "@WRK@/checks/summary.txt"
   format = "txt"
 
-[reference_checker.summary.utdavai]
+[reference_checker.summary.utciboulai]
   file = "@WRK@/checks/summaries_stack"
-  format = "davai"
+  format = "ciboulai"
 
 [reference_checker.ciboulai]
   enabled = false
