@@ -171,3 +171,54 @@ The files are (re)written by the task performing the checks, each time results
 are appended to the other summaries. The analysis performed in the
 `analyze_summary` task is based on the consistency files: `OK` counts as a
 success, `IC` as an error and `0` as a missing file.
+
+### Publishing the DaVaI summaries to a Ciboulai server
+
+As soon as a summary with format `davai` is listed in `summary_active`, the
+files of the stack are also published to a
+[Ciboulai](https://www.umr-cnrm.fr/davai) (DAVAI) server, so that the
+experiment can be followed on its dashboards. The connection is configured in
+the `[reference_checker.ciboulai]` section:
+
+```toml
+[reference_checker.ciboulai]
+  enabled = true
+  server = "https://www.umr-cnrm.fr/davai/"
+  token_file = "~/.ciboulai_token"
+  experiment_name = "ttr-{counter}-{machine}@{user}"
+  name_file = "@CASEDIR@/checks/ciboulai.cfg"
+  counter_file = "@SCRATCH@/@SYS_NAME@/ciboulai/counter"
+  tries = 3
+  sleep = 3
+  timeout = 60
+```
+
+- `enabled`: master switch. Set it to `false` to keep writing the DaVaI files
+  on disk without any exchange with the server.
+- `server`: url of the Ciboulai server, its `api/` endpoint is used.
+- `token_file`: file whose first line holds the access token. The environment
+  variable `CIBOULAI_TOKEN` takes precedence over the file. Ask your Davai
+  administrator for a token.
+- `experiment_name`: pattern to build the experiment name, from the fields
+  `{counter}` (zero-padded to 4 digits), `{machine}` (the platform host) and
+  `{user}` (the unix user), e.g. `ttr-0112-atos_bologna@cvap`.
+- `name_file` (`ciboulai.cfg`): file where the resolved experiment name is
+  stored. All tasks of the experiment reuse it, so the name is built once per
+  case directory.
+- `counter_file`: file holding the counter, protected by a file lock. Its
+  value is read and incremented the first time an experiment name is needed,
+  i.e. when a fresh case directory publishes for the first time. Keep it in a
+  location shared by all the cases, so that successive experiments get
+  successive numbers.
+- `tries`, `sleep`, `timeout`: number of tries, delay between tries and
+  timeout in seconds of one send.
+
+The publication follows the DaVaI client protocol: the experiment is created
+or reset (i.e. cleared of its previous task instances) by the task listed in
+`create_summary`, when the stack directory is created, and then every task
+publishes the files it writes, `itself` before `consistency`.
+
+Publication is best effort: a missing token, a connection problem or a server
+error is logged as a warning, and never changes the result of the reference
+check. The experiment can be opened on the server with
+`https://www.umr-cnrm.fr/davai/lightView/<id>`.
